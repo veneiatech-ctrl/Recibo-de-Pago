@@ -6,7 +6,8 @@
 <title>Recibos de pago · Manuel Rivas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
   --ink:#1C2333; --muted:#6B7385; --line:#E3E6EE; --bg:#EEF0F5;
@@ -294,21 +295,35 @@ function render(){
 /* ---------- numbering (persistent) ---------- */
 function numFor(c){return`MR-${new Date().getFullYear()}-${String(c).padStart(3,'0')}`;}
 async function loadCounter(){
-  try{const r=await window.storage.get('recibos-contador',false);if(r&&r.value)counter=parseInt(r.value)||1;}catch(e){}
+  try{const v=localStorage.getItem('recibos-contador');if(v)counter=parseInt(v)||1;}catch(e){}
+  try{if(window.storage){const r=await window.storage.get('recibos-contador',false);if(r&&r.value)counter=Math.max(counter,parseInt(r.value)||1);}}catch(e){}
   $('numero').value=numFor(counter);render();
 }
-async function saveCounter(){try{await window.storage.set('recibos-contador',String(counter),false);}catch(e){}}
+async function saveCounter(){
+  try{localStorage.setItem('recibos-contador',String(counter));}catch(e){}
+  try{if(window.storage)await window.storage.set('recibos-contador',String(counter),false);}catch(e){}
+}
 
 /* ---------- PDF ---------- */
 function fileName(){const c=($('cliente').value.trim()||'cliente').replace(/[^\wáéíóúñÁÉÍÓÚÑ]+/g,'-');return`Recibo-${$('numero').value}-${c}.pdf`;}
-function worker(){
+async function buildPdf(){
+  await document.fonts.ready;
   const src=$('receipt'),clone=src.cloneNode(true);
   clone.classList.add('exporting');clone.removeAttribute('id');
-  const holder=document.createElement('div');holder.style.cssText='position:fixed;left:-10000px;top:0';
+  const holder=document.createElement('div');
+  holder.style.cssText='position:absolute;left:0;top:0;width:640px;z-index:-9999;pointer-events:none';
   holder.appendChild(clone);document.body.appendChild(holder);
-  const w=html2pdf().set({margin:[12,12,12,12],filename:fileName(),image:{type:'jpeg',quality:.98},
-    html2canvas:{scale:2.5,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(clone);
-  return{w,done:()=>holder.remove()};
+  const sx=window.scrollX,sy=window.scrollY;window.scrollTo(0,0);
+  try{
+    const canvas=await html2canvas(clone,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',scrollX:0,scrollY:0,
+      windowWidth:Math.max(1200,document.documentElement.clientWidth),width:clone.offsetWidth,height:clone.offsetHeight});
+    const pdf=new window.jspdf.jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+    const m=12,maxW=210-2*m,maxH=297-2*m;
+    let w=maxW,h=canvas.height*w/canvas.width;
+    if(h>maxH){h=maxH;w=canvas.width*h/canvas.height;}
+    pdf.addImage(canvas.toDataURL('image/jpeg',0.95),'JPEG',(210-w)/2,m,w,h);
+    return pdf;
+  }finally{holder.remove();window.scrollTo(sx,sy);}
 }
 async function markIssued(){ // count the receipt once it leaves the app
   if($('numero').value===numFor(counter)){counter++;await saveCounter();}
@@ -318,17 +333,14 @@ function check(){if(!$('cliente').value.trim()){toast('Escribe el nombre del cli
   if(!items().some(i=>i.amt>0)){toast('Agrega el monto del servicio');return false;}return true;}
 
 $('pdfBtn').onclick=async()=>{
-  if(!check())return;await document.fonts.ready;
-  const{w,done}=worker();
-  try{await w.save();await markIssued();toast('PDF descargado');}
-  catch(e){toast('No se pudo crear el PDF. Prueba con Imprimir → Guardar como PDF');}
-  finally{done();}
+  if(!check())return;
+  try{const pdf=await buildPdf();pdf.save(fileName());await markIssued();toast('PDF descargado');}
+  catch(e){console.error(e);toast('No se pudo crear el PDF. Prueba con Imprimir → Guardar como PDF');}
 };
 $('shareBtn').onclick=async()=>{
-  if(!check())return;await document.fonts.ready;
-  const{w,done}=worker();
+  if(!check())return;
   try{
-    const blob=await w.outputPdf('blob');
+    const blob=(await buildPdf()).output('blob');
     const file=new File([blob],fileName(),{type:'application/pdf'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
       await navigator.share({files:[file],title:'Recibo de pago'});await markIssued();
@@ -337,7 +349,6 @@ $('shareBtn').onclick=async()=>{
       toast('Tu navegador no comparte archivos: se abrió el PDF para guardarlo');
     }
   }catch(e){if(e.name!=='AbortError')toast('No se pudo compartir. Usa Descargar PDF');}
-  finally{done();}
 };
 $('printBtn').onclick=()=>{if(check())window.print();};
 $('newBtn').onclick=()=>{
