@@ -83,7 +83,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .p-brand{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
 .p-brand .mk{width:40px;height:40px;border-radius:9px;background:#03060F;overflow:hidden;display:block}
 .p-small{color:var(--paper-muted);font-size:11px;line-height:1.5}
-.p-doc{text-align:right}
+.p-doc{text-align:right;margin-left:auto;max-width:100%}
 .p-doc .t{font-family:var(--f-display);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.08em}
 .p-doc .n{font-family:var(--f-mono);font-size:12px}
 .p-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
@@ -126,6 +126,12 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
 .qline .full{grid-column:1/-1}
 .qfoot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
 .pill.info{background:var(--accent-soft);color:var(--ink)}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.langbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.langbar>span{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.langbar .seg{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:5px}
+.langbar button{font:inherit;font-weight:700;font-size:.88rem;border:0;background:none;color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer}
+.langbar button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .ac{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0}
 .ac>span{font-size:.8rem;font-weight:600;color:var(--muted)}
 .ac-list{position:absolute;z-index:20;left:0;right:0;top:100%;margin-top:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(17,27,48,.18);max-height:330px;overflow:auto;padding:4px}
@@ -148,7 +154,10 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
     <div class="status"><span class="dot" id="dbDot"></span><span id="dbText">Servidor sin configurar</span></div>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="Tipo de documento"><button type="button" role="tab" data-tab="recibo" aria-selected="true">Recibo</button><button type="button" role="tab" data-tab="presupuesto" aria-selected="false">Presupuesto</button></nav>
+  <div class="topbar">
+    <nav class="tabs" role="tablist" aria-label="Tipo de documento"><button type="button" role="tab" data-tab="recibo" aria-selected="true">Recibo</button><button type="button" role="tab" data-tab="presupuesto" aria-selected="false">Presupuesto</button></nav>
+    <div class="langbar" role="group" aria-label="Idioma del documento"><span>Idioma del cliente</span><div class="seg"><button type="button" data-l="es" aria-pressed="true">ES · Español</button><button type="button" data-l="de" aria-pressed="false">DE · Deutsch</button><button type="button" data-l="en" aria-pressed="false">EN · English</button></div></div>
+  </div>
 
   <div class="grid" id="tabRecibo">
     <form class="panel" id="form" autocomplete="off">
@@ -462,6 +471,7 @@ function render(){const o=get(),c=calc(),cur=o.moneda,l=o.idioma||"es",T=LG(l);h
   $("pNota").textContent=o.nota?(T.nota+": "+o.nota):"";
   $("pStamp").textContent=c.saldo<=0.004?T.stampPagado:T.stampAbono;
   try{localStorage.setItem("vt_recibo_draft",JSON.stringify(o))}catch(e){}
+  if(typeof syncLangBar==="function")syncLangBar();
 }
 
 const SUBS={"Desarrollo de software":{lbl:"Tipo de desarrollo",ops:["Diseño UX/UI","Tarjeta digital","Tarjeta QR","Otros"]},
@@ -611,7 +621,8 @@ function qRender(){const r=qCalc(),o=r.o,cur=o.qmoneda,l=r.l,T=LG(l),M=n=>moneyL
   $("qpCond").textContent=r.cond;$("qpAntRow").hidden=r.ant===null||r.ap>=100;$("qpAnt").textContent=r.ant===null?"":M(r.ant);
   $("qpNota").textContent=o.qnota?T.nota+": "+o.qnota:"";
   const cli=$("qEnviarCliente").checked,ok=emailOk(o.qemail);$("qHint").textContent="Tú recibes tu copia en tu correo."+(cli?(ok?" El cliente recibe el presupuesto en PDF con un botón para aceptarlo por WhatsApp.":" Para enviárselo al cliente, escribe su correo arriba."):"");
-  try{localStorage.setItem("vt_presu_draft",JSON.stringify(o))}catch(e){}}
+  try{localStorage.setItem("vt_presu_draft",JSON.stringify(o))}catch(e){}
+  if(typeof syncLangBar==="function")syncLangBar()}
 
 function qPdf(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)throw new Error("nolib");
   const r=qCalc(),o=r.o,cur=o.qmoneda,l=r.l,T=LG(l),M=n=>moneyL(n,cur,l),doc=new J({unit:"mm",format:"a4"}),L=20,R=190;const ink=[17,27,48],mut=[106,115,137],line=[225,229,238];
@@ -676,7 +687,7 @@ function qConvert(p){const ls=(p.lineas||[]).filter(l=>num(l.c)>0||num(l.p)>0);i
   say("Recibo "+nro+" creado desde el presupuesto "+p.qnumero+". Revisa el método de pago y pulsa “Enviar recibo”.","ok")}
 
 function showTab(t){const pr=t==="presupuesto";$("tabRecibo").hidden=pr;$("histRecibo").hidden=pr;$("tabPresu").hidden=!pr;$("histPresu").hidden=!pr;
-  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t)));try{localStorage.setItem("vt_tab",t)}catch(e){}}
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t)));try{localStorage.setItem("vt_tab",t)}catch(e){}if(typeof syncLangBar==="function")syncLangBar()}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 
 $("qAdd").onclick=()=>{qlines.push({s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0});qDrawLines();qRender();const el=$("ql_s_"+(qlines.length-1));if(el)el.focus()};
@@ -745,6 +756,11 @@ acSetup("rbuscar",true,r=>{if(r.tipo==="p"){if(r.p.estado==="convertido"){llenar
   else{llenarClienteRecibo(r.c);say("Datos de "+r.c.nombre+" cargados. Completa el servicio y el monto.","info")}});
 acSetup("qbuscarCli",false,r=>{const c=r.c;$("qcliente").value=c.nombre||"";$("qidentificacion").value=c.identificacion||"";$("qpais").value=c.pais||"";$("qemail").value=c.email||"";$("qdireccion").value=c.direccion||"";$("qnovedades").checked=!!c.novedades;autoIdioma("qidioma","qpais");
   qSample=false;$("qSampleTag").hidden=true;qRender();qsay("Datos de "+c.nombre+" cargados.","info")});
+
+/* ---------- barra de idioma (arriba) ---------- */
+function langSel(){return $("tabPresu").hidden?$("idioma"):$("qidioma")}
+function syncLangBar(){const v=langSel().value;document.querySelectorAll(".langbar button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===v)))}
+document.querySelectorAll(".langbar button").forEach(b=>b.onclick=()=>{const sel=langSel();sel.value=b.dataset.l;sel.dataset.manual="1";if($("tabPresu").hidden)render();else qRender()});
 
 /* ---------- boot ---------- */
 let draft=null;try{draft=JSON.parse(localStorage.getItem("vt_recibo_draft")||"null")}catch(e){}
