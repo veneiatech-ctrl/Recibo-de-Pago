@@ -118,6 +118,14 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 details.cfg{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 details.cfg summary{cursor:pointer;font-weight:700;font-size:.85rem}
 details.cfg .in{display:grid;gap:10px;margin-top:10px}
+.tabs{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:5px;align-self:flex-start;max-width:100%}
+.tabs button{font:inherit;font-weight:700;font-size:.92rem;border:0;background:none;color:var(--muted);padding:9px 18px;border-radius:8px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.qlines{display:flex;flex-direction:column;gap:10px}
+.qline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border:1px solid var(--line);border-radius:10px}
+.qline .full{grid-column:1/-1}
+.qfoot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+.pill.info{background:var(--accent-soft);color:var(--ink)}
 </style>
 </head>
 <body>
@@ -125,12 +133,14 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
   <header class="top">
     <div class="brand">
       <div class="mark" aria-hidden="true"><img class="logoimg" alt=""></div>
-      <div><h1>Recibos Veneiatech</h1><p class="sub">Abonos y pagos de clientes · PDF, correo e historial</p></div>
+      <div><h1>Recibos Veneiatech</h1><p class="sub">Recibos y presupuestos · PDF, correo e historial</p></div>
     </div>
     <div class="status"><span class="dot" id="dbDot"></span><span id="dbText">Servidor sin configurar</span></div>
   </header>
 
-  <div class="grid">
+  <nav class="tabs" role="tablist" aria-label="Tipo de documento"><button type="button" role="tab" data-tab="recibo" aria-selected="true">Recibo</button><button type="button" role="tab" data-tab="presupuesto" aria-selected="false">Presupuesto</button></nav>
+
+  <div class="grid" id="tabRecibo">
     <form class="panel" id="form" autocomplete="off">
       <h2>Datos del recibo <span class="tag" id="sampleTag">Datos de ejemplo · reemplázalos</span></h2>
 
@@ -237,9 +247,106 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
     </div>
   </div>
 
-  <section class="panel">
+  <section class="panel" id="histRecibo">
     <h2>Historial de recibos <input class="search" id="buscar" type="search" placeholder="Buscar cliente o N°"></h2>
     <div class="tblwrap" id="histWrap"><p class="empty" id="histEmpty">Aquí aparecerán los recibos que guardes, descargues o envíes desde este navegador.</p></div>
+  </section>
+
+  <div class="grid" id="tabPresu" hidden>
+    <form class="panel" id="qform" autocomplete="off">
+      <h2>Datos del presupuesto <span class="tag" id="qSampleTag">Datos de ejemplo · reemplázalos</span></h2>
+
+      <fieldset>
+        <legend>Documento</legend>
+        <label>N° de presupuesto<input id="qnumero" class="mono" required></label>
+        <label>Fecha<input id="qfecha" type="date" required></label>
+        <label>Validez (días)<input id="qvalidez" type="number" min="1" step="1" value="15" class="mono"></label>
+        <label>Moneda<select id="qmoneda"><option value="EUR">EUR · €</option><option value="USD">USD · $</option></select></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Cliente</legend>
+        <label class="full">Nombre del cliente<input id="qcliente" required></label>
+        <label class="full">N° de identificación (cédula, RIF, DNI, pasaporte…)<input id="qidentificacion" placeholder="Ej.: V-12.345.678"></label>
+        <label>País<input id="qpais" list="paises"></label>
+        <label>Correo del cliente<input id="qemail" type="email"></label>
+        <label class="full">Dirección<textarea id="qdireccion" rows="2"></textarea></label>
+        <label class="check full" for="qnovedades"><input type="checkbox" id="qnovedades">El cliente acepta recibir novedades y ofertas de Veneiatech por correo</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Servicios</legend>
+        <div class="full qlines" id="qlines"></div>
+        <div class="full"><button type="button" class="btn" id="qAdd">+ Agregar servicio</button></div>
+        <label>Descuento (%)<input id="qdesc" type="number" min="0" max="100" step="0.5" value="0" class="mono"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Condiciones</legend>
+        <label class="full">Condiciones de pago<select id="qcond">
+          <option value="50">50 % al aceptar y 50 % a la entrega</option>
+          <option value="100">100 % al aceptar</option>
+          <option value="30">30 % al aceptar y 70 % a la entrega</option>
+          <option value="otro">Otras condiciones</option>
+        </select></label>
+        <label class="full" id="qcondOtroWrap" hidden>Describe las condiciones<input id="qcondOtro" placeholder="Ej.: 3 cuotas mensuales iguales"></label>
+        <label class="full">Plazo de entrega<input id="qplazo" placeholder="Ej.: 10 días hábiles desde el abono"></label>
+        <label class="full">Nota (opcional)<input id="qnota" placeholder="Ej.: incluye 2 rondas de cambios"></label>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="qPdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>Descargar PDF</button>
+        <button type="button" class="btn" id="qSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>Guardar</button>
+        <button type="button" class="btn" id="qNew">Nuevo presupuesto</button>
+      </div>
+      <div class="mailrow">
+        <button type="button" class="btn" id="qMail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg>Enviar presupuesto</button>
+        <label class="check" for="qEnviarCliente" style="flex:0 1 auto"><input type="checkbox" id="qEnviarCliente" checked>Enviar también al cliente</label>
+      </div>
+      <p class="hint" id="qHint"></p>
+      <p class="msg" id="qmsg" hidden></p>
+    </form>
+
+    <div class="paperwrap">
+      <article class="paper" id="qpaper" aria-label="Vista previa del presupuesto">
+        <div class="p-head">
+          <div>
+            <div class="p-brand"><span class="mk"><img class="logoimg" alt="Logo Veneiatech"></span>VENEIATECH</div>
+            <div class="p-small" style="margin-top:6px">Manuel Rivas · Dresden, Alemania<br>info@veneiatech.de · www.veneiatech.de</div>
+          </div>
+          <div class="p-doc"><div class="t">Presupuesto</div><div class="n" id="qpNum"></div><div class="p-small" id="qpFecha"></div><div class="p-small" id="qpValido"></div></div>
+        </div>
+        <div class="p-cols">
+          <div><div class="p-lbl">Cliente</div><div class="p-val" id="qpCliente"></div><div class="p-small" id="qpId"></div><div class="p-small" id="qpDir"></div><div class="p-small" id="qpEmail"></div></div>
+          <div><div class="p-lbl">País</div><div class="p-val" id="qpPais"></div><div class="p-lbl" style="margin-top:10px">Plazo de entrega</div><div class="p-val" id="qpPlazo"></div></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="p-table">
+            <thead><tr><th>Servicio</th><th class="r">Cant.</th><th class="r">Precio</th><th class="r">Importe</th></tr></thead>
+            <tbody id="qpLines"></tbody>
+          </table>
+        </div>
+        <div class="p-sum">
+          <div><span>Subtotal</span><span class="mono" id="qpSub"></span></div>
+          <div id="qpDescRow"><span id="qpDescLbl">Descuento</span><span class="mono" id="qpDesc"></span></div>
+        </div>
+        <div class="p-paid"><div><div class="k">Total del presupuesto</div><div class="p-small" style="color:#C9D3F5" id="qpTotalSub"></div></div><div class="v" id="qpTotal"></div></div>
+        <div class="p-sum">
+          <div><span>Condiciones de pago</span><span id="qpCond" style="text-align:right"></span></div>
+          <div id="qpAntRow" style="font-weight:700"><span>Abono para iniciar</span><span class="mono" id="qpAnt"></span></div>
+        </div>
+        <div class="p-small" id="qpNota"></div>
+        <div class="p-foot">
+          <div class="p-small">Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.</div>
+          <div class="p-legal">Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).</div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <section class="panel" id="histPresu" hidden>
+    <h2>Historial de presupuestos <input class="search" id="qbuscar" type="search" placeholder="Buscar cliente o N°"></h2>
+    <div class="tblwrap" id="qhistWrap"></div>
   </section>
 </div>
 
@@ -397,6 +504,147 @@ $("form").addEventListener("submit",e=>e.preventDefault());
 $("buscar").addEventListener("input",renderHist);
 $("enviarCliente").addEventListener("change",hint);
 
+/* ================= PRESUPUESTOS ================= */
+const QKEY="vt_presupuestos", WA="4915561638412";
+let presus=[], qlines=[], qSample=true;
+const SERV_OPTS=[];
+["Desarrollo de software","Automatización","Agentes virtuales","Presencia en Google"].forEach(s=>{if(SUBS[s])SUBS[s].ops.forEach(o=>SERV_OPTS.push([s,o]));else SERV_OPTS.push([s,""])});
+const optLabel=v=>{const [s,o]=String(v||"").split("|");return s+(o?" · "+o:"")};
+function qLoad(){try{presus=JSON.parse(localStorage.getItem(QKEY)||"[]")}catch(e){presus=[]}presus.sort((a,b)=>(b.actualizado||0)-(a.actualizado||0))}
+function qStore(){try{localStorage.setItem(QKEY,JSON.stringify(presus));return true}catch(e){return false}}
+function qNext(){const y=new Date().getFullYear();let max=0;presus.forEach(r=>{const m=String(r.numero||"").match(/PT-(\d{4})-(\d+)/);if(m&&+m[1]===y)max=Math.max(max,+m[2])});return "PT-"+y+"-"+String(max+1).padStart(4,"0")}
+function addDays(s,n){const p=String(s||"").split("-");if(p.length!==3)return"";const d=new Date(Date.UTC(+p[0],p[1]-1,+p[2]+(Math.max(0,Math.round(num(n)))||0)));return d.toISOString().slice(0,10)}
+function qsay(t,k){const m=$("qmsg");m.textContent=t;m.className="msg "+(k||"info");m.hidden=false}
+const QF=["qnumero","qfecha","qvalidez","qmoneda","qcliente","qidentificacion","qpais","qemail","qdireccion","qdesc","qcond","qcondOtro","qplazo","qnota"];
+function qGet(){const o={};QF.forEach(k=>o[k]=$(k).value.trim());o.qnovedades=$("qnovedades").checked;o.lineas=qlines.map(l=>({s:l.s,d:l.d,c:l.c,p:l.p}));return o}
+function qCalc(){const o=qGet();const ls=qlines.map(l=>{const c=num(l.c),p=num(l.p);return{servicio:optLabel(l.s),descripcion:String(l.d||"").trim(),cantidad:c,precio:p,importe:Math.round(c*p*100)/100}}).filter(l=>l.cantidad>0||l.precio>0||l.descripcion);
+  const sub=Math.round(ls.reduce((a,l)=>a+l.importe,0)*100)/100,dp=Math.min(100,Math.max(0,num(o.qdesc))),desc=Math.round(sub*dp)/100,total=Math.round((sub-desc)*100)/100;
+  const ap=o.qcond==="otro"?null:num(o.qcond),cond=o.qcond==="otro"?(o.qcondOtro||"A convenir"):$("qcond").selectedOptions[0].textContent;
+  return{o,ls,sub,dp,desc,total,ap,ant:ap===null?null:Math.round(total*ap)/100,cond,vence:addDays(o.qfecha,o.qvalidez)}}
+function qSet(o){QF.forEach(k=>{if(o[k]!==undefined)$(k).value=o[k]});$("qnovedades").checked=!!o.qnovedades;qlines=(o.lineas&&o.lineas.length?o.lineas:[{s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0}]).map(l=>Object.assign({},l));qDrawLines();qRender()}
+function qDrawLines(){const w=$("qlines");w.innerHTML="";qlines.forEach((l,i)=>{const box=document.createElement("div");box.className="qline";
+  const lb=(t,el,cls)=>{const L=document.createElement("label");if(cls)L.className=cls;L.append(document.createTextNode(t),el);return L};
+  const sel=document.createElement("select");sel.id="ql_s_"+i;SERV_OPTS.forEach(([s,o])=>{const op=document.createElement("option");op.value=s+"|"+o;op.textContent=s+(o?" · "+o:"");sel.appendChild(op)});sel.value=l.s;if(sel.value!==l.s){sel.selectedIndex=0;l.s=sel.value}
+  sel.onchange=()=>{l.s=sel.value;qRender()};
+  const d=document.createElement("input");d.id="ql_d_"+i;d.value=l.d||"";d.placeholder="Ej.: diseño a medida con su logo";d.oninput=()=>{l.d=d.value;qRender()};
+  const c=document.createElement("input");c.id="ql_c_"+i;c.type="number";c.min="0";c.step="1";c.className="mono";c.value=l.c;c.oninput=()=>{l.c=c.value;qRender()};
+  const p=document.createElement("input");p.id="ql_p_"+i;p.type="number";p.min="0";p.step="0.01";p.className="mono";p.value=l.p;p.oninput=()=>{l.p=p.value;qRender()};
+  const foot=document.createElement("div");foot.className="qfoot";const imp=document.createElement("span");imp.className="mono qimp";imp.dataset.i=i;
+  const x=document.createElement("button");x.type="button";x.className="link";x.textContent="Quitar";x.disabled=qlines.length<2;x.onclick=()=>{qlines.splice(i,1);qDrawLines();qRender()};
+  foot.append(imp,x);box.append(lb("Servicio "+(i+1),sel,"full"),lb("Descripción (opcional)",d,"full"),lb("Cantidad",c),lb("Precio unitario",p),foot);w.appendChild(box)})}
+function qRender(){const r=qCalc(),o=r.o,cur=o.qmoneda;
+  document.querySelectorAll("#qlines .qimp").forEach(s=>{const l=qlines[+s.dataset.i];s.textContent="Importe: "+money(num(l.c)*num(l.p),cur)});
+  $("qcondOtroWrap").hidden=o.qcond!=="otro";
+  $("qpNum").textContent="N° "+(o.qnumero||"—");$("qpFecha").textContent="Fecha: "+fmtDate(o.qfecha);$("qpValido").textContent=r.vence?"Válido hasta: "+fmtDate(r.vence):"";
+  $("qpCliente").textContent=o.qcliente||"—";$("qpId").textContent=o.qidentificacion?"ID: "+o.qidentificacion:"";$("qpDir").textContent=o.qdireccion;$("qpEmail").textContent=o.qemail;
+  $("qpPais").textContent=o.qpais||"—";$("qpPlazo").textContent=o.qplazo||"A convenir";
+  const tb=$("qpLines");tb.innerHTML="";(r.ls.length?r.ls:[{servicio:"—",descripcion:"",cantidad:0,precio:0,importe:0}]).forEach(l=>{const tr=document.createElement("tr");
+    const td=document.createElement("td");const a=document.createElement("div");a.className="p-val";a.textContent=l.servicio;td.appendChild(a);if(l.descripcion){const b=document.createElement("div");b.className="p-small";b.textContent=l.descripcion;td.appendChild(b)}tr.appendChild(td);
+    [String(l.cantidad),money(l.precio,cur),money(l.importe,cur)].forEach(v=>{const t=document.createElement("td");t.className="r";t.textContent=v;tr.appendChild(t)});tb.appendChild(tr)});
+  $("qpSub").textContent=money(r.sub,cur);$("qpDescRow").hidden=!(r.dp>0);$("qpDescLbl").textContent="Descuento ("+r.dp+" %)";$("qpDesc").textContent="− "+money(r.desc,cur);
+  $("qpTotal").textContent=money(r.total,cur);$("qpTotalSub").textContent=r.ls.length+" servicio"+(r.ls.length===1?"":"s");
+  $("qpCond").textContent=r.cond;$("qpAntRow").hidden=r.ant===null||r.ap>=100;$("qpAnt").textContent=r.ant===null?"":money(r.ant,cur);
+  $("qpNota").textContent=o.qnota?"Nota: "+o.qnota:"";
+  const cli=$("qEnviarCliente").checked,ok=emailOk(o.qemail);$("qHint").textContent="Tú recibes tu copia en tu correo."+(cli?(ok?" El cliente recibe el presupuesto en PDF con un botón para aceptarlo por WhatsApp.":" Para enviárselo al cliente, escribe su correo arriba."):"");
+  try{localStorage.setItem("vt_presu_draft",JSON.stringify(o))}catch(e){}}
+
+function qPdf(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)throw new Error("nolib");
+  const r=qCalc(),o=r.o,cur=o.qmoneda,doc=new J({unit:"mm",format:"a4"}),L=20,R=190;const ink=[17,27,48],mut=[106,115,137],line=[225,229,238];
+  const head=()=>{doc.addImage(LOGO,"JPEG",L,15,15,15);doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(17);doc.text("VENEIATECH",L+19,25.5);
+    doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text("Manuel Rivas · Dresden, Alemania",L,36);doc.text("info@veneiatech.de · www.veneiatech.de",L,40.5);
+    doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text("PRESUPUESTO",R,22,{align:"right"});
+    doc.setFont("courier","normal");doc.setFontSize(10);doc.text("N° "+o.qnumero,R,28,{align:"right"});
+    doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("Fecha: "+fmtDate(o.qfecha),R,33.5,{align:"right"});if(r.vence)doc.text("Válido hasta: "+fmtDate(r.vence),R,38.5,{align:"right"});
+    doc.setDrawColor(...ink);doc.setLineWidth(1);doc.line(L,46,R,46)};
+  const foot=()=>{const fy=272;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,fy,R,fy);doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...ink);
+    doc.text("Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.",L,fy+6);doc.setFontSize(6.5);doc.setTextColor(...mut);
+    doc.text("Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).",L,fy+11)};
+  const lbl=(t,x,yy,al)=>{doc.setFont("helvetica","bold");doc.setFontSize(7.5);doc.setTextColor(...mut);doc.text(t.toUpperCase(),x,yy,al?{align:al}:undefined)};
+  head();let y=56;lbl("Cliente",L,y);lbl("País",115,y);y+=5.5;
+  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const cl=doc.splitTextToSize(o.qcliente||"—",88);doc.text(cl,L,y);doc.text(o.qpais||"—",115,y);
+  let yc=y+cl.length*5;doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);
+  if(o.qidentificacion){doc.text("ID: "+o.qidentificacion,L,yc);yc+=4}if(o.qdireccion){const d=doc.splitTextToSize(o.qdireccion,88);doc.text(d,L,yc);yc+=d.length*4}if(o.qemail){doc.text(o.qemail,L,yc);yc+=4}
+  lbl("Plazo de entrega",115,y+9);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);const pl=doc.splitTextToSize(o.qplazo||"A convenir",75);doc.text(pl,115,y+14.5);
+  y=Math.max(yc,y+14.5+pl.length*4.5)+8;
+  const th=()=>{lbl("Servicio",L,y);lbl("Cant.",128,y,"right");lbl("Precio",158,y,"right");lbl("Importe",R,y,"right");y+=2.5;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=6};th();
+  r.ls.forEach(l=>{const dl=l.descripcion?doc.splitTextToSize(l.descripcion,100):[];const sl=doc.splitTextToSize(l.servicio,100);const h=sl.length*5+dl.length*4.2+4;
+    if(y+h>250){foot();doc.addPage();head();y=56;th()}
+    doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);doc.text(sl,L,y);
+    doc.setFont("courier","normal");doc.setFontSize(9.5);doc.text(String(l.cantidad),128,y,{align:"right"});doc.text(money(l.precio,cur),158,y,{align:"right"});doc.setFont("courier","bold");doc.text(money(l.importe,cur),R,y,{align:"right"});
+    let yy=y+sl.length*5;if(dl.length){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text(dl,L,yy-1);yy+=dl.length*4.2}
+    y=yy+1;doc.setDrawColor(...line);doc.line(L,y-2,R,y-2);y+=4});
+  if(y>205){foot();doc.addPage();head();y=56}
+  const row=(k,v,b)=>{doc.setFont("helvetica",b?"bold":"normal");doc.setFontSize(9.5);doc.setTextColor(...ink);doc.text(k,110,y);doc.setFont("courier",b?"bold":"normal");doc.text(v,R,y,{align:"right"});y+=6};
+  row("Subtotal",money(r.sub,cur));if(r.dp>0)row("Descuento ("+r.dp+" %)","- "+money(r.desc,cur));y+=2;
+  doc.setFillColor(...ink);doc.roundedRect(L,y,R-L,16,2,2,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text("TOTAL DEL PRESUPUESTO",L+6,y+10);
+  doc.setFont("courier","bold");doc.setFontSize(15);doc.text(money(r.total,cur),R-6,y+10.5,{align:"right"});y+=25;
+  lbl("Condiciones de pago",L,y);y+=5;doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...ink);const cd=doc.splitTextToSize(r.cond,R-L);doc.text(cd,L,y);y+=cd.length*5;
+  if(r.ant!==null&&r.ap<100){doc.setFont("helvetica","bold");doc.text("Abono para iniciar: "+money(r.ant,cur),L,y+1);y+=7}
+  if(o.qnota){y+=3;doc.setFont("helvetica","italic");doc.setFontSize(9);doc.setTextColor(...mut);const n=doc.splitTextToSize("Nota: "+o.qnota,R-L);doc.text(n,L,y);y+=n.length*4.5}
+  foot();return doc}
+function qFile(o){return "Presupuesto_"+o.qnumero+"_"+(o.qcliente||"cliente").replace(/[^\wÀ-ÿ]+/g,"_").slice(0,40)+".pdf"}
+
+function qSave(extra){const r=qCalc(),o=r.o;if(!o.qnumero||!o.qcliente){qsay("Falta el número o el nombre del cliente.","err");return false}
+  if(!r.ls.length||r.total<=0){qsay("Agrega al menos un servicio con precio.","err");return false}
+  const id=o.qnumero.replace(/[^\w\-]/g,"_");const prev=presus.find(p=>p.id===id)||{};
+  const data=Object.assign({},o,{id,totalN:r.total,vence:r.vence,estado:prev.estado||"pendiente",recibo:prev.recibo||"",creado:prev.creado||Date.now(),actualizado:Date.now(),enviado:prev.enviado||0},extra||{});
+  presus=presus.filter(p=>p.id!==id);presus.unshift(data);if(!qStore()){qsay("El navegador no permitió guardar el historial (¿modo privado?).","err");return false}qRenderHist();return true}
+
+function qEstado(p){if(p.estado==="convertido")return["Convertido en "+(p.recibo||"recibo"),"full"];if(p.vence&&p.vence<today())return["Vencido","part"];return["Vigente","info"]}
+function qRenderHist(){const q=$("qbuscar").value.trim().toLowerCase(),list=presus.filter(p=>!q||(p.qcliente||"").toLowerCase().includes(q)||(p.qnumero||"").toLowerCase().includes(q)),w=$("qhistWrap");w.innerHTML="";
+  if(!presus.length){const p=document.createElement("p");p.className="empty";p.textContent="Aquí aparecerán los presupuestos que guardes, descargues o envíes desde este navegador.";w.appendChild(p);return}
+  const t=document.createElement("table");t.className="hist";t.innerHTML="<thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th class='r'>Total</th><th>Válido hasta</th><th>Estado</th><th></th></tr></thead>";const tb=document.createElement("tbody");
+  list.forEach(p=>{const tr=document.createElement("tr");[[p.qnumero,"mono"],[fmtDate(p.qfecha)],[p.qcliente],[money(p.totalN||0,p.qmoneda),"r"],[fmtDate(p.vence)]].forEach(([v,c])=>{const td=document.createElement("td");td.textContent=v||"";if(c)td.className=c;tr.appendChild(td)});
+    const es=qEstado(p),tdE=document.createElement("td"),pill=document.createElement("span");pill.className="pill "+es[1];pill.textContent=es[0];tdE.appendChild(pill);tr.appendChild(tdE);
+    const act=document.createElement("td");act.style.whiteSpace="nowrap";const b1=document.createElement("button");b1.type="button";b1.className="link";b1.textContent="Abrir";
+    b1.onclick=()=>{qSample=false;$("qSampleTag").hidden=true;qSet(p);window.scrollTo({top:0,behavior:"smooth"});qsay("Presupuesto "+p.qnumero+" cargado.","info")};
+    const b2=document.createElement("button");b2.type="button";b2.className="link";b2.textContent="Convertir en recibo";b2.disabled=p.estado==="convertido";b2.onclick=()=>qConvert(p);
+    act.append(b1,b2);tr.appendChild(act);tb.appendChild(tr)});t.appendChild(tb);w.appendChild(t);
+  if(!list.length){const e=document.createElement("p");e.className="empty";e.textContent="Ningún presupuesto coincide con la búsqueda.";w.appendChild(e)}}
+
+function qConvert(p){const ls=(p.lineas||[]).filter(l=>num(l.c)>0||num(l.p)>0);if(!ls.length){qsay("Este presupuesto no tiene servicios.","err");return}
+  const [s,sub]=String(ls[0].s).split("|");const desc=ls.length>1?"Incluye: "+ls.map(l=>optLabel(l.s)+(num(l.c)>1?" (x"+num(l.c)+")":"")).join(" + "):(ls[0].d||"");
+  const ap=p.qcond==="otro"?"50":String(num(p.qcond)||50),mod=["50","30","100"].includes(ap)?ap:"50",nro=nextNumber();
+  showTab("recibo");sampleOn=false;$("sampleTag").hidden=true;
+  set({numero:nro,fecha:today(),cliente:p.qcliente,identificacion:p.qidentificacion,pais:p.qpais,clienteEmail:p.qemail,direccion:p.qdireccion,servicio:s,subservicio:sub||"",concepto:desc,
+    total:String(p.totalN||0),moneda:p.qmoneda,abono:"",previo:"0",metodo:$("metodo").value,nota:"Según presupuesto "+p.qnumero+".",novedades:!!p.qnovedades,modo:mod});
+  setModo(mod);p.estado="convertido";p.recibo=nro;p.actualizado=Date.now();qStore();qRenderHist();window.scrollTo({top:0,behavior:"smooth"});
+  say("Recibo "+nro+" creado desde el presupuesto "+p.qnumero+". Revisa el método de pago y pulsa “Enviar recibo”.","ok")}
+
+function showTab(t){const pr=t==="presupuesto";$("tabRecibo").hidden=pr;$("histRecibo").hidden=pr;$("tabPresu").hidden=!pr;$("histPresu").hidden=!pr;
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t)));try{localStorage.setItem("vt_tab",t)}catch(e){}}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+$("qAdd").onclick=()=>{qlines.push({s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0});qDrawLines();qRender();const el=$("ql_s_"+(qlines.length-1));if(el)el.focus()};
+$("qform").addEventListener("input",()=>{if(qSample){qSample=false;$("qSampleTag").hidden=true}qRender()});
+$("qform").addEventListener("change",qRender);
+$("qform").addEventListener("submit",e=>e.preventDefault());
+$("qbuscar").addEventListener("input",qRenderHist);
+$("qSave").onclick=()=>{if(qSave())qsay("Presupuesto "+$("qnumero").value+" guardado en el historial.","ok")};
+$("qNew").onclick=()=>{qSample=false;$("qSampleTag").hidden=true;qSet({qnumero:qNext(),qfecha:today(),qvalidez:"15",qmoneda:$("qmoneda").value,qcliente:"",qidentificacion:"",qpais:"",qemail:"",qdireccion:"",qdesc:"0",qcond:"50",qcondOtro:"",qplazo:"",qnota:"",qnovedades:false,lineas:[]});$("qmsg").hidden=true;$("qcliente").focus()};
+$("qPdf").onclick=()=>{const o=qGet();let doc;try{doc=qPdf()}catch(e){qsay("No se pudo generar el PDF. Recarga la página e inténtalo otra vez.","err");return}if(!qSave())return;doc.save(qFile(o));qsay("PDF descargado y presupuesto guardado en el historial.","ok")};
+$("qMail").onclick=async()=>{const r=qCalc(),o=r.o,k=cfg();
+  if(!k.url||!k.key){qsay("Primero configura la conexión con tu servidor en la pestaña Recibo (Conexión con el servidor).","err");return}
+  if(!o.qnumero||!o.qcliente){qsay("Falta el número o el nombre del cliente.","err");return}
+  if(!r.ls.length||r.total<=0){qsay("Agrega al menos un servicio con precio.","err");return}
+  if(o.qcond==="otro"&&!o.qcondOtro){$("qcondOtro").focus();qsay("Describe las condiciones de pago.","err");return}
+  const alCliente=$("qEnviarCliente").checked;if(alCliente&&!emailOk(o.qemail)){$("qemail").focus();qsay("Escribe un correo válido del cliente o desmarca “Enviar también al cliente”.","err");return}
+  let doc;try{doc=qPdf()}catch(e){qsay("No se pudo generar el PDF.","err");return}
+  const b=$("qMail");b.disabled=true;b.lastChild.textContent="Enviando…";
+  const payload={docTipo:"presupuesto",tipo:"Presupuesto",numero:o.qnumero,fecha:o.qfecha,validoHasta:r.vence,cliente:o.qcliente,identificacion:o.qidentificacion,pais:o.qpais,clienteEmail:o.qemail,direccion:o.qdireccion,
+    moneda:o.qmoneda,lineas:r.ls,subtotal:r.sub,descuentoPct:r.dp,descuento:r.desc,total:r.total,condiciones:r.cond,anticipoPct:r.ap,anticipo:r.ant,plazo:o.qplazo,nota:o.qnota,
+    servicio:r.ls.map(l=>l.servicio).join(" + "),enviarCliente:alCliente,aceptaNovedades:o.qnovedades,filename:qFile(o),pdfBase64:doc.output("datauristring").split(",")[1]};
+  try{const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),30000);
+    const res=await fetch(k.url,{method:"POST",headers:{"Content-Type":"application/json","X-Veneiatech-Key":k.key},body:JSON.stringify(payload),signal:ctl.signal});clearTimeout(t);
+    let j={};try{j=await res.json()}catch(e){}
+    if(res.status===401||res.status===403){qsay("El servidor rechazó la clave. Revisa que sea la misma que en n8n.","err");return}
+    if(res.status===404){qsay("El webhook no existe o el workflow no está activo en n8n.","err");return}
+    if(!res.ok||j.ok===false){qsay("El servidor respondió con un error ("+res.status+(j.error?": "+j.error:"")+").","err");return}
+    const cli=j.cliente===true;qSave({enviado:Date.now()});
+    qsay(cli?"Enviado. Te llegó tu copia y "+o.qcliente+" recibió el presupuesto en "+o.qemail+".":(alCliente?"Te llegó tu copia, pero el servidor no envió el presupuesto al cliente. Revisa que el código de n8n esté actualizado.":"Enviado. Te llegará el presupuesto "+o.qnumero+" a tu correo."),cli||!alCliente?"ok":"err")}
+  catch(e){qsay(e&&e.name==="AbortError"?"El servidor tardó demasiado. Revisa tu correo antes de reintentar para no enviarlo dos veces.":"No se pudo conectar con el servidor. Revisa la URL, tu internet y la configuración CORS de n8n.","err")}
+  finally{b.disabled=false;b.lastChild.textContent="Enviar presupuesto"}};
+
 /* ---------- boot ---------- */
 let draft=null;try{draft=JSON.parse(localStorage.getItem("vt_recibo_draft")||"null")}catch(e){}
 try{const u=localStorage.getItem("vt_cfg_url");if(u)$("cfgUrl").value=u;if(localStorage.getItem("vt_cfg_key"))$("cfgKey").placeholder="Clave guardada en este navegador"}catch(e){}
@@ -406,6 +654,11 @@ else{set(Object.assign({},SAMPLE,{numero:"VT-"+new Date().getFullYear()+"-0001",
 renderHist();
 
 status();if(sampleOn&&recibos.length)$("numero").value=nextNumber();
+qLoad();let qdraft=null;try{qdraft=JSON.parse(localStorage.getItem("vt_presu_draft")||"null")}catch(e){}
+if(qdraft&&qdraft.qcliente&&qdraft.qcliente!=="Cliente de ejemplo S.L."){qSample=false;$("qSampleTag").hidden=true;qSet(qdraft)}
+else qSet({qnumero:qNext(),qfecha:today(),qvalidez:"15",qmoneda:"EUR",qcliente:"Cliente de ejemplo S.L.",qidentificacion:"",qpais:"Venezuela",qemail:"",qdireccion:"Av. Principal, Maturín",qdesc:"0",qcond:"50",qcondOtro:"",qplazo:"10 días hábiles desde el abono",qnota:"",qnovedades:false,
+  lineas:[{s:"Desarrollo de software|Tarjeta digital",d:"Diseño premium con su logo y botón de WhatsApp",c:1,p:120},{s:"Presencia en Google|Google Business Profile",d:"Creación y optimización del perfil",c:1,p:80}]});
+qRenderHist();let tab0="recibo";try{tab0=localStorage.getItem("vt_tab")||"recibo"}catch(e){}showTab(location.hash==="#presupuesto"?"presupuesto":tab0);
 })();
 </script>
 </body>
