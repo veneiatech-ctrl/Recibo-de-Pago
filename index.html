@@ -126,6 +126,16 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
 .qline .full{grid-column:1/-1}
 .qfoot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
 .pill.info{background:var(--accent-soft);color:var(--ink)}
+.ac{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0}
+.ac>span{font-size:.8rem;font-weight:600;color:var(--muted)}
+.ac-list{position:absolute;z-index:20;left:0;right:0;top:100%;margin-top:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(17,27,48,.18);max-height:330px;overflow:auto;padding:4px}
+.ac-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer}
+.ac-item[aria-selected="true"],.ac-item:hover{background:var(--accent-soft)}
+.ac-item .a{min-width:0;display:flex;flex-direction:column}
+.ac-item .a b{font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-item .a small{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-item .z{flex:0 0 auto;font-size:.76rem;color:var(--muted);text-align:right}
+.ac-empty{padding:10px;font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -152,6 +162,7 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
 
       <fieldset>
         <legend>Cliente</legend>
+        <div class="full ac"><span>Buscar cliente o presupuesto</span><input id="rbuscar" type="search" autocomplete="off" placeholder="Nombre, correo, cédula, PT-… o VT-…" aria-controls="rbuscarList" aria-autocomplete="list"><div class="ac-list" id="rbuscarList" role="listbox" hidden></div></div>
         <label class="full">Nombre del cliente<input id="cliente" required></label>
         <label class="full">N° de identificación (cédula, RIF, DNI, pasaporte…)<input id="identificacion" placeholder="Ej.: V-12.345.678"></label>
         <label>País<input id="pais" list="paises" required></label>
@@ -266,6 +277,7 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
 
       <fieldset>
         <legend>Cliente</legend>
+        <div class="full ac"><span>Buscar cliente existente</span><input id="qbuscarCli" type="search" autocomplete="off" placeholder="Nombre, correo, cédula, PT-… o VT-…" aria-controls="qbuscarCliList" aria-autocomplete="list"><div class="ac-list" id="qbuscarCliList" role="listbox" hidden></div></div>
         <label class="full">Nombre del cliente<input id="qcliente" required></label>
         <label class="full">N° de identificación (cédula, RIF, DNI, pasaporte…)<input id="qidentificacion" placeholder="Ej.: V-12.345.678"></label>
         <label>País<input id="qpais" list="paises"></label>
@@ -644,6 +656,43 @@ $("qMail").onclick=async()=>{const r=qCalc(),o=r.o,k=cfg();
     qsay(cli?"Enviado. Te llegó tu copia y "+o.qcliente+" recibió el presupuesto en "+o.qemail+".":(alCliente?"Te llegó tu copia, pero el servidor no envió el presupuesto al cliente. Revisa que el código de n8n esté actualizado.":"Enviado. Te llegará el presupuesto "+o.qnumero+" a tu correo."),cli||!alCliente?"ok":"err")}
   catch(e){qsay(e&&e.name==="AbortError"?"El servidor tardó demasiado. Revisa tu correo antes de reintentar para no enviarlo dos veces.":"No se pudo conectar con el servidor. Revisa la URL, tu internet y la configuración CORS de n8n.","err")}
   finally{b.disabled=false;b.lastChild.textContent="Enviar presupuesto"}};
+
+/* ================= BUSCADOR DE CLIENTES ================= */
+const norm=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
+function clientesConocidos(){const m=new Map();
+  const add=(c,docNum,ts)=>{if(!c.nombre)return;const k=norm(c.email)||("n:"+norm(c.nombre));const prev=m.get(k);
+    if(!prev||ts>prev.ts)m.set(k,Object.assign({},c,{ts,docs:new Set([...(prev?prev.docs:[]),docNum])}));else prev.docs.add(docNum)};
+  recibos.forEach(r=>add({nombre:r.cliente,identificacion:r.identificacion,pais:r.pais,email:r.clienteEmail,direccion:r.direccion,novedades:!!r.novedades},r.numero,r.actualizado||0));
+  presus.forEach(p=>add({nombre:p.qcliente,identificacion:p.qidentificacion,pais:p.qpais,email:p.qemail,direccion:p.qdireccion,novedades:!!p.qnovedades},p.qnumero,p.actualizado||0));
+  return [...m.values()].sort((a,b)=>b.ts-a.ts)}
+function acResultados(q,conPresus){const n=norm(q);if(!n)return[];const out=[];
+  if(conPresus)presus.forEach(p=>{if([p.qnumero,p.qcliente,p.qemail,p.qidentificacion].some(v=>norm(v).includes(n)))out.push({tipo:"p",p})});
+  clientesConocidos().forEach(c=>{if([c.nombre,c.email,c.identificacion,...c.docs].some(v=>norm(v).includes(n)))out.push({tipo:"c",c})});
+  return out.slice(0,8)}
+function acSetup(inputId,conPresus,onPick){const inp=$(inputId),list=$(inputId+"List");let res=[],sel=-1,tmr=0;
+  const close=()=>{list.hidden=true;sel=-1;inp.setAttribute("aria-expanded","false")};
+  const draw=()=>{list.innerHTML="";res=acResultados(inp.value,conPresus);if(!inp.value.trim()){close();return}
+    if(!res.length){const e=document.createElement("div");e.className="ac-empty";e.textContent=(presus.length||recibos.length)?"No hay coincidencias en este navegador.":"Aún no hay clientes guardados en este navegador.";list.appendChild(e)}
+    res.forEach((r,i)=>{const it=document.createElement("div");it.className="ac-item";it.setAttribute("role","option");it.setAttribute("aria-selected",String(i===sel));
+      const a=document.createElement("div");a.className="a";const t=document.createElement("b");const sm=document.createElement("small");const z=document.createElement("div");z.className="z";
+      if(r.tipo==="p"){const es=qEstado(r.p);t.textContent=r.p.qnumero+" · "+(r.p.qcliente||"");sm.textContent=(r.p.lineas||[]).map(l=>optLabel(l.s)).join(" + ");z.textContent=money(r.p.totalN||0,r.p.qmoneda)+" · "+es[0]}
+      else{t.textContent=r.c.nombre;sm.textContent=[r.c.email,r.c.identificacion,r.c.pais].filter(Boolean).join(" · ");z.textContent="Cliente"}
+      a.append(t,sm);it.append(a,z);it.onmousedown=e=>{e.preventDefault();pick(i)};list.appendChild(it)});
+    list.hidden=false;inp.setAttribute("aria-expanded","true")};
+  const pick=i=>{const r=res[i];if(!r)return;onPick(r);inp.value="";close()};
+  inp.addEventListener("input",e=>{e.stopPropagation();clearTimeout(tmr);sel=-1;draw()});
+  inp.addEventListener("focus",()=>{clearTimeout(tmr);if(inp.value.trim())draw()});
+  inp.addEventListener("blur",()=>{tmr=setTimeout(close,120)});
+  inp.addEventListener("keydown",e=>{if(list.hidden)return;if(e.key==="ArrowDown"){e.preventDefault();sel=Math.min(res.length-1,sel+1);draw()}
+    else if(e.key==="ArrowUp"){e.preventDefault();sel=Math.max(0,sel-1);draw()}else if(e.key==="Enter"){e.preventDefault();pick(sel<0?0:sel)}else if(e.key==="Escape"){close()}})}
+function llenarClienteRecibo(c){$("cliente").value=c.nombre||"";$("identificacion").value=c.identificacion||"";$("pais").value=c.pais||"";$("clienteEmail").value=c.email||"";$("direccion").value=c.direccion||"";$("novedades").checked=!!c.novedades;
+  sampleOn=false;$("sampleTag").hidden=true;render()}
+acSetup("rbuscar",true,r=>{if(r.tipo==="p"){if(r.p.estado==="convertido"){llenarClienteRecibo({nombre:r.p.qcliente,identificacion:r.p.qidentificacion,pais:r.p.qpais,email:r.p.qemail,direccion:r.p.qdireccion,novedades:r.p.qnovedades});
+      say("El presupuesto "+r.p.qnumero+" ya se convirtió en "+(r.p.recibo||"un recibo")+". Cargué solo los datos del cliente; para cobrar el saldo usa “Cobrar saldo” en el historial.","info")}
+    else qConvert(r.p)}
+  else{llenarClienteRecibo(r.c);say("Datos de "+r.c.nombre+" cargados. Completa el servicio y el monto.","info")}});
+acSetup("qbuscarCli",false,r=>{const c=r.c;$("qcliente").value=c.nombre||"";$("qidentificacion").value=c.identificacion||"";$("qpais").value=c.pais||"";$("qemail").value=c.email||"";$("qdireccion").value=c.direccion||"";$("qnovedades").checked=!!c.novedades;
+  qSample=false;$("qSampleTag").hidden=true;qRender();qsay("Datos de "+c.nombre+" cargados.","info")});
 
 /* ---------- boot ---------- */
 let draft=null;try{draft=JSON.parse(localStorage.getItem("vt_recibo_draft")||"null")}catch(e){}
