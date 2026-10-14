@@ -158,6 +158,7 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
         <legend>Documento</legend>
         <label>N° de recibo<input id="numero" class="mono" required></label>
         <label>Fecha<input id="fecha" type="date" required></label>
+        <label class="full">Idioma del documento (lo ve el cliente)<select id="idioma"><option value="es">Español</option><option value="de">Deutsch</option><option value="en">English</option></select></label>
       </fieldset>
 
       <fieldset>
@@ -223,36 +224,36 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
         <div class="p-head">
           <div>
             <div class="p-brand"><span class="mk"><img class="logoimg" alt="Logo Veneiatech"></span>VENEIATECH</div>
-            <div class="p-small" style="margin-top:6px">Manuel Rivas · Dresden, Alemania<br>info@veneiatech.de · www.veneiatech.de</div>
+            <div class="p-small" style="margin-top:6px"><span data-t="ubic">Manuel Rivas · Dresden, Alemania</span><br>info@veneiatech.de · www.veneiatech.de</div>
           </div>
           <div class="p-doc"><div class="t" id="pTitulo">Recibo de abono</div><div class="n" id="pNum"></div><div class="p-small" id="pFecha"></div></div>
         </div>
 
         <div class="p-cols">
-          <div><div class="p-lbl">Cliente</div><div class="p-val" id="pCliente"></div><div class="p-small" id="pId"></div><div class="p-small" id="pDir"></div></div>
-          <div><div class="p-lbl">País</div><div class="p-val" id="pPais"></div><div class="p-lbl" style="margin-top:10px">Método de pago</div><div class="p-val" id="pMetodo"></div></div>
+          <div><div class="p-lbl" data-t="cliente">Cliente</div><div class="p-val" id="pCliente"></div><div class="p-small" id="pId"></div><div class="p-small" id="pDir"></div></div>
+          <div><div class="p-lbl" data-t="pais">País</div><div class="p-val" id="pPais"></div><div class="p-lbl" style="margin-top:10px" data-t="metodo">Método de pago</div><div class="p-val" id="pMetodo"></div></div>
         </div>
 
         <table class="p-table">
-          <thead><tr><th>Servicio</th><th class="r">Total servicio</th></tr></thead>
+          <thead><tr><th data-t="servicio">Servicio</th><th class="r" data-t="totalCol">Total servicio</th></tr></thead>
           <tbody><tr><td><div class="p-val" id="pServicio"></div><div class="p-small" id="pConcepto"></div></td><td class="r" id="pTotal"></td></tr></tbody>
         </table>
 
         <div class="p-paid"><div><div class="k" id="pPaidLbl">Abono recibido</div><div class="p-small" style="color:#C9D3F5" id="pPct"></div></div><div class="v" id="pAbono"></div></div>
 
         <div class="p-sum">
-          <div><span>Total del servicio</span><span class="mono" id="sTotal"></span></div>
-          <div><span>Pagado anteriormente</span><span class="mono" id="sPrevio"></span></div>
-          <div><span>Pagado con este recibo</span><span class="mono" id="sAbono"></span></div>
-          <div style="font-weight:700;border-top:1px solid var(--paper-line);padding-top:6px"><span>Saldo pendiente</span><span class="mono" id="sSaldo"></span></div>
+          <div><span data-t="totalServicio">Total del servicio</span><span class="mono" id="sTotal"></span></div>
+          <div><span data-t="pagadoAntes">Pagado anteriormente</span><span class="mono" id="sPrevio"></span></div>
+          <div><span data-t="pagadoHoy">Pagado con este recibo</span><span class="mono" id="sAbono"></span></div>
+          <div style="font-weight:700;border-top:1px solid var(--paper-line);padding-top:6px"><span data-t="saldo">Saldo pendiente</span><span class="mono" id="sSaldo"></span></div>
         </div>
 
         <div class="p-small" id="pNota"></div>
         <div class="p-stamp" id="pStamp">Recibido</div>
 
         <div class="p-foot">
-          <div class="p-small">Gracias por confiar en Veneiatech.</div>
-          <div class="p-legal">Factura no válida para efectos legales fuera de la UE. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).</div>
+          <div class="p-small" data-t="gracias">Gracias por confiar en Veneiatech.</div>
+          <div class="p-legal" data-t="legalRecibo">Factura no válida para efectos legales fuera de la UE. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).</div>
         </div>
       </article>
     </div>
@@ -272,6 +273,7 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
         <label>N° de presupuesto<input id="qnumero" class="mono" required></label>
         <label>Fecha<input id="qfecha" type="date" required></label>
         <label>Validez (días)<input id="qvalidez" type="number" min="1" step="1" value="15" class="mono"></label>
+        <label class="full">Idioma del documento (lo ve el cliente)<select id="qidioma"><option value="es">Español</option><option value="de">Deutsch</option><option value="en">English</option></select></label>
         <label>Moneda<select id="qmoneda"><option value="EUR">EUR · €</option><option value="USD">USD · $</option></select></label>
       </fieldset>
 
@@ -324,33 +326,33 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
         <div class="p-head">
           <div>
             <div class="p-brand"><span class="mk"><img class="logoimg" alt="Logo Veneiatech"></span>VENEIATECH</div>
-            <div class="p-small" style="margin-top:6px">Manuel Rivas · Dresden, Alemania<br>info@veneiatech.de · www.veneiatech.de</div>
+            <div class="p-small" style="margin-top:6px"><span data-t="ubic">Manuel Rivas · Dresden, Alemania</span><br>info@veneiatech.de · www.veneiatech.de</div>
           </div>
-          <div class="p-doc"><div class="t">Presupuesto</div><div class="n" id="qpNum"></div><div class="p-small" id="qpFecha"></div><div class="p-small" id="qpValido"></div></div>
+          <div class="p-doc"><div class="t" data-t="presupuesto">Presupuesto</div><div class="n" id="qpNum"></div><div class="p-small" id="qpFecha"></div><div class="p-small" id="qpValido"></div></div>
         </div>
         <div class="p-cols">
-          <div><div class="p-lbl">Cliente</div><div class="p-val" id="qpCliente"></div><div class="p-small" id="qpId"></div><div class="p-small" id="qpDir"></div><div class="p-small" id="qpEmail"></div></div>
-          <div><div class="p-lbl">País</div><div class="p-val" id="qpPais"></div><div class="p-lbl" style="margin-top:10px">Plazo de entrega</div><div class="p-val" id="qpPlazo"></div></div>
+          <div><div class="p-lbl" data-t="cliente">Cliente</div><div class="p-val" id="qpCliente"></div><div class="p-small" id="qpId"></div><div class="p-small" id="qpDir"></div><div class="p-small" id="qpEmail"></div></div>
+          <div><div class="p-lbl" data-t="pais">País</div><div class="p-val" id="qpPais"></div><div class="p-lbl" style="margin-top:10px" data-t="plazo">Plazo de entrega</div><div class="p-val" id="qpPlazo"></div></div>
         </div>
         <div style="overflow-x:auto">
           <table class="p-table">
-            <thead><tr><th>Servicio</th><th class="r">Cant.</th><th class="r">Precio</th><th class="r">Importe</th></tr></thead>
+            <thead><tr><th data-t="servicio">Servicio</th><th class="r" data-t="cant">Cant.</th><th class="r" data-t="precio">Precio</th><th class="r" data-t="importe">Importe</th></tr></thead>
             <tbody id="qpLines"></tbody>
           </table>
         </div>
         <div class="p-sum">
-          <div><span>Subtotal</span><span class="mono" id="qpSub"></span></div>
+          <div><span data-t="subtotal">Subtotal</span><span class="mono" id="qpSub"></span></div>
           <div id="qpDescRow"><span id="qpDescLbl">Descuento</span><span class="mono" id="qpDesc"></span></div>
         </div>
-        <div class="p-paid"><div><div class="k">Total del presupuesto</div><div class="p-small" style="color:#C9D3F5" id="qpTotalSub"></div></div><div class="v" id="qpTotal"></div></div>
+        <div class="p-paid"><div><div class="k" data-t="totalPresu">Total del presupuesto</div><div class="p-small" style="color:#C9D3F5" id="qpTotalSub"></div></div><div class="v" id="qpTotal"></div></div>
         <div class="p-sum">
-          <div><span>Condiciones de pago</span><span id="qpCond" style="text-align:right"></span></div>
-          <div id="qpAntRow" style="font-weight:700"><span>Abono para iniciar</span><span class="mono" id="qpAnt"></span></div>
+          <div><span data-t="condPago">Condiciones de pago</span><span id="qpCond" style="text-align:right"></span></div>
+          <div id="qpAntRow" style="font-weight:700"><span data-t="abonoIniciar">Abono para iniciar</span><span class="mono" id="qpAnt"></span></div>
         </div>
         <div class="p-small" id="qpNota"></div>
         <div class="p-foot">
-          <div class="p-small">Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.</div>
-          <div class="p-legal">Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).</div>
+          <div class="p-small" data-t="aceptar">Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.</div>
+          <div class="p-legal" data-t="legalPresu">Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).</div>
         </div>
       </article>
     </div>
@@ -368,7 +370,63 @@ details.cfg .in{display:grid;gap:10px;margin-top:10px}
 const LOGO="data:image/jpeg;base64,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";
 document.querySelectorAll(".logoimg").forEach(i=>i.src=LOGO);
 const $=id=>document.getElementById(id);
-const F=["numero","fecha","cliente","identificacion","pais","clienteEmail","direccion","servicio","subservicio","concepto","total","moneda","abono","previo","metodo","nota"];
+/* ================= IDIOMAS (ES / DE / EN) ================= */
+const I18N={
+ es:{loc:"es-ES",num:"N°",fecha:"Fecha",cliente:"Cliente",pais:"País",metodo:"Método de pago",servicio:"Servicio",totalCol:"Total servicio",
+  totalServicio:"Total del servicio",pagadoAntes:"Pagado anteriormente",pagadoHoy:"Pagado con este recibo",saldo:"Saldo pendiente",
+  abonoRecibido:"Abono recibido",pagoRecibido:"Pago recibido",delTotal:"% del total",pagoAdicional:"pago adicional",stampPagado:"Pagado",stampAbono:"Abono recibido",
+  nota:"Nota",gracias:"Gracias por confiar en Veneiatech.",ubic:"Manuel Rivas · Dresden, Alemania",
+  legalRecibo:"Factura no válida para efectos legales fuera de la UE. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).",
+  tAbono:"Recibo de abono",tTotal:"Recibo de pago total",tFinal:"Recibo de pago final",fRecibo:"Recibo",
+  presupuesto:"Presupuesto",fPresu:"Presupuesto",validoHasta:"Válido hasta",plazo:"Plazo de entrega",aConvenir:"A convenir",cant:"Cant.",precio:"Precio",importe:"Importe",
+  subtotal:"Subtotal",descuento:"Descuento",totalPresu:"Total del presupuesto",servicios:n=>n+(n===1?" servicio":" servicios"),condPago:"Condiciones de pago",abonoIniciar:"Abono para iniciar",
+  aceptar:"Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.",
+  legalPresu:"Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).",incluye:"Incluye",segun:"Según presupuesto",
+  cond:{"50":"50 % al aceptar y 50 % a la entrega","100":"100 % al aceptar","30":"30 % al aceptar y 70 % a la entrega"}},
+ de:{loc:"de-DE",num:"Nr.",fecha:"Datum",cliente:"Kunde",pais:"Land",metodo:"Zahlungsart",servicio:"Leistung",totalCol:"Betrag",
+  totalServicio:"Gesamtbetrag der Leistung",pagadoAntes:"Bereits bezahlt",pagadoHoy:"Mit dieser Zahlung",saldo:"Offener Betrag",
+  abonoRecibido:"Anzahlung erhalten",pagoRecibido:"Zahlung erhalten",delTotal:"% des Gesamtbetrags",pagoAdicional:"weitere Zahlung",stampPagado:"Bezahlt",stampAbono:"Anzahlung erhalten",
+  nota:"Hinweis",gracias:"Vielen Dank für Ihr Vertrauen in Veneiatech.",ubic:"Manuel Rivas · Dresden, Deutschland",
+  legalRecibo:"Diese Zahlungsbestätigung ist keine Rechnung. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmer).",
+  tAbono:"Zahlungsbestätigung (Anzahlung)",tTotal:"Zahlungsbestätigung",tFinal:"Zahlungsbestätigung (Restzahlung)",fRecibo:"Zahlungsbestaetigung",
+  presupuesto:"Angebot",fPresu:"Angebot",validoHasta:"Gültig bis",plazo:"Lieferzeit",aConvenir:"Nach Vereinbarung",cant:"Menge",precio:"Preis",importe:"Betrag",
+  subtotal:"Zwischensumme",descuento:"Rabatt",totalPresu:"Gesamtbetrag",servicios:n=>n+(n===1?" Leistung":" Leistungen"),condPago:"Zahlungsbedingungen",abonoIniciar:"Anzahlung zum Projektstart",
+  aceptar:"Um dieses Angebot anzunehmen, antworten Sie an info@veneiatech.de oder schreiben Sie uns per WhatsApp.",
+  legalPresu:"Dieses Angebot ist keine Rechnung. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmer).",incluye:"Enthält",segun:"Gemäß Angebot",
+  cond:{"50":"50 % bei Auftragserteilung, 50 % bei Lieferung","100":"100 % bei Auftragserteilung","30":"30 % bei Auftragserteilung, 70 % bei Lieferung"}},
+ en:{loc:"en-GB",num:"No.",fecha:"Date",cliente:"Client",pais:"Country",metodo:"Payment method",servicio:"Service",totalCol:"Total",
+  totalServicio:"Total for the service",pagadoAntes:"Previously paid",pagadoHoy:"Paid with this receipt",saldo:"Balance due",
+  abonoRecibido:"Deposit received",pagoRecibido:"Payment received",delTotal:"% of total",pagoAdicional:"additional payment",stampPagado:"Paid",stampAbono:"Deposit received",
+  nota:"Note",gracias:"Thank you for choosing Veneiatech.",ubic:"Manuel Rivas · Dresden, Germany",
+  legalRecibo:"This receipt is not an invoice. No VAT is charged in accordance with § 19 UStG (German small business rule).",
+  tAbono:"Payment receipt (deposit)",tTotal:"Payment receipt",tFinal:"Payment receipt (final payment)",fRecibo:"Receipt",
+  presupuesto:"Quote",fPresu:"Quote",validoHasta:"Valid until",plazo:"Delivery time",aConvenir:"To be agreed",cant:"Qty",precio:"Price",importe:"Amount",
+  subtotal:"Subtotal",descuento:"Discount",totalPresu:"Total",servicios:n=>n+(n===1?" service":" services"),condPago:"Payment terms",abonoIniciar:"Deposit to start",
+  aceptar:"To accept this quote, reply to info@veneiatech.de or message us on WhatsApp.",
+  legalPresu:"This quote is not an invoice. No VAT is charged in accordance with § 19 UStG (German small business rule).",incluye:"Includes",segun:"As per quote",
+  cond:{"50":"50% on acceptance, 50% on delivery","100":"100% on acceptance","30":"30% on acceptance, 70% on delivery"}}};
+const TRAD={"Desarrollo de software":{de:"Softwareentwicklung",en:"Software development"},"Automatización":{de:"Automatisierung",en:"Automation"},
+ "Agentes virtuales":{de:"KI-Agenten",en:"AI virtual agents"},"Presencia en Google":{de:"Google-Präsenz",en:"Google presence"},
+ "Diseño UX/UI":{de:"UX/UI-Design",en:"UX/UI design"},"Tarjeta digital":{de:"Digitale Visitenkarte",en:"Digital business card"},"Tarjeta QR":{de:"QR-Visitenkarte",en:"QR business card"},
+ "Otros":{de:"Sonstiges",en:"Other"},"SEO (posicionamiento en Google)":{de:"SEO (Google-Ranking)",en:"SEO (Google ranking)"},"Paquete completo de Google":{de:"Google-Komplettpaket",en:"Complete Google package"},
+ "Transferencia bancaria":{de:"Banküberweisung",en:"Bank transfer"},
+ "Alemania":{de:"Deutschland",en:"Germany"},"España":{de:"Spanien",en:"Spain"},"Colombia":{de:"Kolumbien",en:"Colombia"},"México":{de:"Mexiko",en:"Mexico"},
+ "Perú":{de:"Peru",en:"Peru"},"Argentina":{de:"Argentinien",en:"Argentina"},"Estados Unidos":{de:"USA",en:"United States"},"Austria":{de:"Österreich",en:"Austria"},
+ "Suiza":{de:"Schweiz",en:"Switzerland"},"Francia":{de:"Frankreich",en:"France"},"Italia":{de:"Italien",en:"Italy"},"Países Bajos":{de:"Niederlande",en:"Netherlands"},
+ "Bélgica":{de:"Belgien",en:"Belgium"},"Reino Unido":{de:"Vereinigtes Königreich",en:"United Kingdom"},"Panamá":{de:"Panama",en:"Panama"},"República Dominicana":{de:"Dominikanische Republik",en:"Dominican Republic"},"Efectivo":{de:"Barzahlung",en:"Cash"},"Pago móvil":{de:"Mobile Zahlung",en:"Mobile payment"},"Otro":{de:"Sonstige",en:"Other"}};
+const tr=(s,l)=>{if(!l||l==="es")return s;const k=String(s||"").trim();const hit=TRAD[k]||TRAD[Object.keys(TRAD).find(x=>x.toLowerCase()===k.toLowerCase())];return (hit&&hit[l])||s};
+const LG=l=>I18N[l]||I18N.es;
+const svcL=(s,sub,l)=>tr(s,l)+(sub?" · "+tr(sub,l):"");
+function moneyL(n,c,l){try{return new Intl.NumberFormat(LG(l).loc,{style:"currency",currency:c||"EUR"}).format(n)}catch(e){return (+n).toFixed(2)+" "+c}}
+function fmtDateL(s,l){if(!s)return"";const [y,m,d]=String(s).split("-");return l==="de"?d+"."+m+"."+y:d+"/"+m+"/"+y}
+const PAIS_DE=["alemania","germany","deutschland","austria","osterreich","oesterreich","suiza","schweiz","switzerland","liechtenstein"];
+const PAIS_ES=["venezuela","espana","spain","colombia","mexico","chile","peru","argentina","ecuador","bolivia","uruguay","paraguay","panama","costa rica","cuba","republica dominicana","guatemala","honduras","el salvador","nicaragua","puerto rico","guinea ecuatorial"];
+function idiomaPorPais(p){const n=String(p||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();if(!n)return null;
+  if(PAIS_DE.some(x=>n.includes(x)))return"de";if(PAIS_ES.some(x=>n.includes(x)))return"es";return"en"}
+function aplicarTextos(root,l){const T=LG(l);root.querySelectorAll("[data-t]").forEach(el=>{const v=T[el.dataset.t];if(typeof v==="string")el.textContent=v})}
+function autoIdioma(selId,paisId){const sel=$(selId);if(sel.dataset.manual==="1")return;const s=idiomaPorPais($(paisId).value);if(s&&sel.value!==s){sel.value=s}}
+
+const F=["numero","fecha","idioma","cliente","identificacion","pais","clienteEmail","direccion","servicio","subservicio","concepto","total","moneda","abono","previo","metodo","nota"];
 let modo="50", recibos=[], sampleOn=true;
 const LS_KEY="vt_recibos_historial";
 function loadHist(){try{recibos=JSON.parse(localStorage.getItem(LS_KEY)||"[]")}catch(e){recibos=[]}recibos.sort((a,b)=>(b.actualizado||0)-(a.actualizado||0))}
@@ -384,7 +442,7 @@ function money(n,c){try{return new Intl.NumberFormat("es-ES",{style:"currency",c
 function fmtDate(s){if(!s)return"";const [y,m,d]=s.split("-");return d+"/"+m+"/"+y}
 function nextNumber(){const y=new Date().getFullYear();let max=0;recibos.forEach(r=>{const m=String(r.numero||"").match(/VT-(\d{4})-(\d+)/);if(m&&+m[1]===y)max=Math.max(max,+m[2])});return "VT-"+y+"-"+String(max+1).padStart(4,"0")}
 function get(){const o={};F.forEach(k=>o[k]=$(k).value.trim());o.modo=modo;o.novedades=$("novedades").checked;return o}
-function set(o){$("novedades").checked=!!o.novedades;F.forEach(k=>{if(k==="subservicio")return;if(o[k]!==undefined)$(k).value=o[k]});fillSubs(o.subservicio);if(o.subservicio)$("subservicio").value=o.subservicio;setModo(o.modo||"otro",false);render()}
+function set(o){$("idioma").dataset.manual=o.idioma?"1":"0";if(!o.idioma){$("idioma").value=idiomaPorPais(o.pais)||"es"}$("novedades").checked=!!o.novedades;F.forEach(k=>{if(k==="subservicio")return;if(o[k]!==undefined)$(k).value=o[k]});fillSubs(o.subservicio);if(o.subservicio)$("subservicio").value=o.subservicio;setModo(o.modo||"otro",false);render()}
 
 function calc(){const total=num($("total").value),previo=num($("previo").value),abono=num($("abono").value);const saldo=Math.max(0,total-previo-abono);const pct=total>0?Math.round((abono/total)*1000)/10:0;return{total,previo,abono,saldo,pct}}
 function tipo(c){if(c.saldo<=0.004&&c.previo>0)return"Recibo de pago final";if(c.saldo<=0.004)return"Recibo de pago total";return"Recibo de abono"}
@@ -392,16 +450,17 @@ function tipo(c){if(c.saldo<=0.004&&c.previo>0)return"Recibo de pago final";if(c
 function setModo(p,recalc=true){modo=p;document.querySelectorAll("#pctBtns .chip").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===p)));if(!recalc)return;const t=num($("total").value),pr=num($("previo").value);
   if(p==="saldo")$("abono").value=Math.max(0,t-pr).toFixed(2);else if(p!=="otro")$("abono").value=(t*num(p)/100).toFixed(2);render()}
 
-function render(){const o=get(),c=calc(),cur=o.moneda;hint();subToggle();
-  $("pTitulo").textContent=tipo(c);$("pNum").textContent="N° "+(o.numero||"—");$("pFecha").textContent=fmtDate(o.fecha);
-  $("pCliente").textContent=o.cliente||"—";$("pId").textContent=o.identificacion?"ID: "+o.identificacion:"";$("pDir").textContent=o.direccion;$("pPais").textContent=o.pais||"—";$("pMetodo").textContent=o.metodo;
-  $("pServicio").textContent=svc(o)||"—";$("pConcepto").textContent=o.concepto||"";$("pTotal").textContent=money(c.total,cur);
-  $("pPaidLbl").textContent=c.saldo<=0.004?"Pago recibido":"Abono recibido";
-  $("pPct").textContent=c.pct+" % del total"+(c.previo>0?" · pago adicional":"");
-  $("pAbono").textContent=money(c.abono,cur);
-  $("sTotal").textContent=money(c.total,cur);$("sPrevio").textContent=money(c.previo,cur);$("sAbono").textContent=money(c.abono,cur);$("sSaldo").textContent=money(c.saldo,cur);
-  $("pNota").textContent=o.nota?("Nota: "+o.nota):"";
-  $("pStamp").textContent=c.saldo<=0.004?"Pagado":"Abono recibido";
+function tipoL(c,l){const T=LG(l);if(c.saldo<=0.004&&c.previo>0)return T.tFinal;if(c.saldo<=0.004)return T.tTotal;return T.tAbono}
+function render(){const o=get(),c=calc(),cur=o.moneda,l=o.idioma||"es",T=LG(l);hint();subToggle();aplicarTextos($("paper"),l);
+  $("pTitulo").textContent=tipoL(c,l);$("pNum").textContent=T.num+" "+(o.numero||"—");$("pFecha").textContent=fmtDateL(o.fecha,l);
+  $("pCliente").textContent=o.cliente||"—";$("pId").textContent=o.identificacion?"ID: "+o.identificacion:"";$("pDir").textContent=o.direccion;$("pPais").textContent=tr(o.pais,l)||"—";$("pMetodo").textContent=tr(o.metodo,l);
+  $("pServicio").textContent=svcL(o.servicio,SUBS[o.servicio]?o.subservicio:"",l)||"—";$("pConcepto").textContent=o.concepto||"";$("pTotal").textContent=moneyL(c.total,cur,l);
+  $("pPaidLbl").textContent=c.saldo<=0.004?T.pagoRecibido:T.abonoRecibido;
+  $("pPct").textContent=c.pct+" "+T.delTotal+(c.previo>0?" · "+T.pagoAdicional:"");
+  $("pAbono").textContent=moneyL(c.abono,cur,l);
+  $("sTotal").textContent=moneyL(c.total,cur,l);$("sPrevio").textContent=moneyL(c.previo,cur,l);$("sAbono").textContent=moneyL(c.abono,cur,l);$("sSaldo").textContent=moneyL(c.saldo,cur,l);
+  $("pNota").textContent=o.nota?(T.nota+": "+o.nota):"";
+  $("pStamp").textContent=c.saldo<=0.004?T.stampPagado:T.stampAbono;
   try{localStorage.setItem("vt_recibo_draft",JSON.stringify(o))}catch(e){}
 }
 
@@ -421,45 +480,38 @@ function say(t,k){const m=$("msg");m.textContent=t;m.className="msg "+(k||"info"
 
 /* ---------- PDF ---------- */
 function buildPdf(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)throw new Error("nolib");
-  const o=get(),c=calc(),cur=o.moneda,doc=new J({unit:"mm",format:"a4"});const W=210,L=20,R=190;
+  const o=get(),c=calc(),cur=o.moneda,l=o.idioma||"es",T=LG(l),M=(n)=>moneyL(n,cur,l),doc=new J({unit:"mm",format:"a4"});const L=20,R=190;
   const ink=[17,27,48],mut=[106,115,137],acc=[47,85,228],line=[225,229,238];
-  // logo mark
   doc.addImage(LOGO,"JPEG",L,15,15,15);
   doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(17);doc.text("VENEIATECH",L+19,25.5);
-  doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text("Manuel Rivas · Dresden, Alemania",L,36);doc.text("info@veneiatech.de · www.veneiatech.de",L,40.5);
-  doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(tipo(c).toUpperCase(),R,24,{align:"right"});
-  doc.setFont("courier","normal");doc.setFontSize(10);doc.text("N° "+o.numero,R,30,{align:"right"});
-  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("Fecha: "+fmtDate(o.fecha),R,35.5,{align:"right"});
+  doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text(T.ubic,L,36);doc.text("info@veneiatech.de · www.veneiatech.de",L,40.5);
+  doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(tipoL(c,l).toUpperCase(),R,24,{align:"right"});
+  doc.setFont("courier","normal");doc.setFontSize(10);doc.text(T.num+" "+o.numero,R,30,{align:"right"});
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);doc.text(T.fecha+": "+fmtDateL(o.fecha,l),R,35.5,{align:"right"});
   doc.setDrawColor(...ink);doc.setLineWidth(1);doc.line(L,46,R,46);
-  // client
-  let y=56;const lbl=(t,x,yy)=>{doc.setFont("helvetica","bold");doc.setFontSize(7.5);doc.setTextColor(...mut);doc.text(t.toUpperCase(),x,yy)};
-  lbl("Cliente",L,y);lbl("País",115,y);y+=5.5;
-  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const cl=doc.splitTextToSize(o.cliente||"—",88);doc.text(cl,L,y);doc.text(o.pais||"—",115,y);
+  let y=56;const lbl=(t,x,yy,al)=>{doc.setFont("helvetica","bold");doc.setFontSize(7.5);doc.setTextColor(...mut);doc.text(t.toUpperCase(),x,yy,al?{align:al}:undefined)};
+  lbl(T.cliente,L,y);lbl(T.pais,115,y);y+=5.5;
+  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const cl=doc.splitTextToSize(o.cliente||"—",88);doc.text(cl,L,y);doc.text(tr(o.pais,l)||"—",115,y);
   let yc=y+cl.length*5;if(o.direccion){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);const d=doc.splitTextToSize(o.direccion,88);doc.text(d,L,yc);yc+=d.length*4}
   if(o.identificacion){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text("ID: "+o.identificacion,L,yc);yc+=4}
   if(o.clienteEmail){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text(o.clienteEmail,L,yc);yc+=4}
-  lbl("Método de pago",115,y+9);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);doc.text(o.metodo,115,y+14.5);
+  lbl(T.metodo,115,y+9);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);doc.text(tr(o.metodo,l),115,y+14.5);
   y=Math.max(yc,y+18)+8;
-  // table
-  lbl("Servicio",L,y);doc.text("TOTAL SERVICIO",R,y,{align:"right"});y+=2.5;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=6.5;
-  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);doc.text(svc(o)||"—",L,y);doc.setFont("courier","bold");doc.text(money(c.total,cur),R,y,{align:"right"});
-  y+=5;if(o.concepto){doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);const cc=doc.splitTextToSize(o.concepto,120);doc.text(cc,L,y);y+=cc.length*4.5}
+  lbl(T.servicio,L,y);lbl(T.totalCol,R,y,"right");y+=2.5;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=6.5;
+  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const sv=doc.splitTextToSize(svcL(o.servicio,SUBS[o.servicio]?o.subservicio:"",l)||"—",125);doc.text(sv,L,y);doc.setFont("courier","bold");doc.text(M(c.total),R,y,{align:"right"});
+  y+=sv.length*5;if(o.concepto){doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);const cc=doc.splitTextToSize(o.concepto,125);doc.text(cc,L,y);y+=cc.length*4.5}
   y+=1;doc.line(L,y,R,y);y+=8;
-  // paid band
-  doc.setFillColor(...ink);doc.roundedRect(L,y,R-L,19,2,2,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(8.5);doc.text((c.saldo<=0.004?"PAGO RECIBIDO":"ABONO RECIBIDO"),L+6,y+8);
-  doc.setFont("helvetica","normal");doc.setTextColor(201,211,245);doc.text(c.pct+" % del total"+(c.previo>0?" · pago adicional":""),L+6,y+13.5);
-  doc.setTextColor(255,255,255);doc.setFont("courier","bold");doc.setFontSize(16);doc.text(money(c.abono,cur),R-6,y+12,{align:"right"});y+=29;
-  // summary
-  const row=(k,v,b)=>{doc.setFont("helvetica",b?"bold":"normal");doc.setFontSize(9.5);doc.setTextColor(...ink);doc.text(k,110,y);doc.setFont("courier",b?"bold":"normal");doc.text(v,R,y,{align:"right"});y+=6};
-  row("Total del servicio",money(c.total,cur));row("Pagado anteriormente",money(c.previo,cur));row("Pagado con este recibo",money(c.abono,cur));doc.line(110,y-3.5,R,y-3.5);y+=1;row("Saldo pendiente",money(c.saldo,cur),true);
-  // stamp
-  doc.setDrawColor(...acc);doc.setLineWidth(0.7);doc.setTextColor(...acc);doc.setFont("helvetica","bold");doc.setFontSize(9);const st=(c.saldo<=0.004?"PAGADO":"ABONO RECIBIDO");const sw=doc.getTextWidth(st)+8;doc.roundedRect(L,y-22,sw,8,1,1,"S");doc.text(st,L+4,y-16.6);
-  if(o.nota){y+=4;doc.setFont("helvetica","italic");doc.setFontSize(9);doc.setTextColor(...mut);const n=doc.splitTextToSize("Nota: "+o.nota,R-L);doc.text(n,L,y);y+=n.length*4.5}
-  // footer
-  const fy=272;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,fy,R,fy);doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...ink);doc.text("Gracias por confiar en Veneiatech.",L,fy+6);
-  doc.setFontSize(6.5);doc.setTextColor(...mut);doc.text("Factura no válida para efectos legales fuera de la UE. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).",L,fy+11);
+  doc.setFillColor(...ink);doc.roundedRect(L,y,R-L,19,2,2,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(8.5);doc.text((c.saldo<=0.004?T.pagoRecibido:T.abonoRecibido).toUpperCase(),L+6,y+8);
+  doc.setFont("helvetica","normal");doc.setTextColor(201,211,245);doc.text(c.pct+" "+T.delTotal+(c.previo>0?" · "+T.pagoAdicional:""),L+6,y+13.5);
+  doc.setTextColor(255,255,255);doc.setFont("courier","bold");doc.setFontSize(16);doc.text(M(c.abono),R-6,y+12,{align:"right"});y+=29;
+  const row=(k,v,b)=>{doc.setFont("helvetica",b?"bold":"normal");doc.setFontSize(9.5);doc.setTextColor(...ink);doc.text(k,105,y);doc.setFont("courier",b?"bold":"normal");doc.text(v,R,y,{align:"right"});y+=6};
+  row(T.totalServicio,M(c.total));row(T.pagadoAntes,M(c.previo));row(T.pagadoHoy,M(c.abono));doc.line(105,y-3.5,R,y-3.5);y+=1;row(T.saldo,M(c.saldo),true);
+  doc.setDrawColor(...acc);doc.setLineWidth(0.7);doc.setTextColor(...acc);doc.setFont("helvetica","bold");doc.setFontSize(9);const st=(c.saldo<=0.004?T.stampPagado:T.stampAbono).toUpperCase();const sw=doc.getTextWidth(st)+8;doc.roundedRect(L,y-22,sw,8,1,1,"S");doc.text(st,L+4,y-16.6);
+  if(o.nota){y+=4;doc.setFont("helvetica","italic");doc.setFontSize(9);doc.setTextColor(...mut);const n=doc.splitTextToSize(T.nota+": "+o.nota,R-L);doc.text(n,L,y);y+=n.length*4.5}
+  const fy=272;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,fy,R,fy);doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...ink);doc.text(T.gracias,L,fy+6);
+  doc.setFontSize(6.5);doc.setTextColor(...mut);doc.text(T.legalRecibo,L,fy+11);
   return doc}
-function fileName(o){return "Recibo_"+o.numero+"_"+(o.cliente||"cliente").replace(/[^\wÀ-ÿ]+/g,"_").slice(0,40)+".pdf"}
+function fileName(o){return LG(o.idioma).fRecibo+"_"+o.numero+"_"+(o.cliente||"cliente").replace(/[^\wÀ-ÿ]+/g,"_").slice(0,40)+".pdf"}
 
 /* ---------- storage ---------- */
 async function save(extra){
@@ -482,7 +534,7 @@ function renderHist(){const q=$("buscar").value.trim().toLowerCase();const list=
 
 /* ---------- actions ---------- */
 $("btnSave").onclick=async()=>{if(await save()){say("Recibo "+$("numero").value+" guardado en el historial.","ok")}};
-$("btnNew").onclick=()=>{sampleOn=false;$("sampleTag").hidden=true;F.forEach(k=>{if(!["moneda","metodo","previo","servicio","subservicio"].includes(k))$(k).value=""});$("previo").value="0";$("novedades").checked=false;$("numero").value=nextNumber();$("fecha").value=today();setModo("50");$("msg").hidden=true;$("cliente").focus()};
+$("btnNew").onclick=()=>{sampleOn=false;$("sampleTag").hidden=true;F.forEach(k=>{if(!["moneda","metodo","previo","servicio","subservicio"].includes(k))$(k).value=""});$("previo").value="0";$("novedades").checked=false;$("idioma").value="es";$("idioma").dataset.manual="0";$("numero").value=nextNumber();$("fecha").value=today();setModo("50");$("msg").hidden=true;$("cliente").focus()};
 
 $("btnPdf").onclick=async()=>{const o=get();let doc;try{doc=buildPdf()}catch(e){say("No se pudo generar el PDF. Recarga la página e inténtalo otra vez.","err");return}
   await save();doc.save(fileName(o));say("PDF descargado y recibo guardado en el historial.","ok")};
@@ -495,7 +547,7 @@ $("btnMail").onclick=async()=>{const o=get(),c=calc(),k=cfg();
   if(alCliente&&!emailOk(o.clienteEmail)){$("clienteEmail").focus();say("Escribe un correo válido del cliente o desmarca “Enviar también al cliente”.","err");return}
   let doc;try{doc=buildPdf()}catch(e){say("No se pudo generar el PDF.","err");return}
   const b=$("btnMail");b.disabled=true;b.lastChild.textContent="Enviando…";
-  const payload=Object.assign({},o,{tipo:tipo(c),total:c.total,abono:c.abono,previo:c.previo,saldo:c.saldo,pct:c.pct,servicio:svc(o),enviarCliente:alCliente,aceptaNovedades:$("novedades").checked,filename:fileName(o),pdfBase64:doc.output("datauristring").split(",")[1]});
+  const payload=Object.assign({},o,{tipo:tipo(c),total:c.total,abono:c.abono,previo:c.previo,saldo:c.saldo,pct:c.pct,servicio:svc(o),lang:o.idioma||"es",tipoCliente:tipoL(c,o.idioma),servicioCliente:svcL(o.servicio,SUBS[o.servicio]?o.subservicio:"",o.idioma),metodoCliente:tr(o.metodo,o.idioma),enviarCliente:alCliente,aceptaNovedades:$("novedades").checked,filename:fileName(o),pdfBase64:doc.output("datauristring").split(",")[1]});
   try{const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),30000);
     const r=await fetch(k.url,{method:"POST",headers:{"Content-Type":"application/json","X-Veneiatech-Key":k.key},body:JSON.stringify(payload),signal:ctl.signal});clearTimeout(t);
     let j={};try{j=await r.json()}catch(e){}
@@ -510,6 +562,7 @@ $("btnCfg").onclick=()=>{const u=$("cfgUrl").value.trim(),k=$("cfgKey").value.tr
   try{localStorage.setItem("vt_cfg_url",u);localStorage.setItem("vt_cfg_key",k)}catch(e){say("El navegador no permitió guardar la conexión.","err");return}$("cfgKey").value="";$("cfgKey").placeholder="Clave guardada en este navegador";$("cfgBox").open=false;status();say("Conexión guardada.","ok")};
 document.querySelectorAll("#pctBtns .chip").forEach(b=>b.onclick=()=>setModo(b.dataset.p));
 $("form").addEventListener("input",e=>{if(sampleOn){sampleOn=false;$("sampleTag").hidden=true}
+  if(e.target.id==="idioma")$("idioma").dataset.manual="1";if(e.target.id==="pais")autoIdioma("idioma","pais");
   if(e.target.id==="abono"&&modo!=="otro")setModo("otro",false);
   if((e.target.id==="total"||e.target.id==="previo")&&modo!=="otro")setModo(modo);else render()});
 $("form").addEventListener("submit",e=>e.preventDefault());
@@ -527,13 +580,13 @@ function qStore(){try{localStorage.setItem(QKEY,JSON.stringify(presus));return t
 function qNext(){const y=new Date().getFullYear();let max=0;presus.forEach(r=>{const m=String(r.numero||"").match(/PT-(\d{4})-(\d+)/);if(m&&+m[1]===y)max=Math.max(max,+m[2])});return "PT-"+y+"-"+String(max+1).padStart(4,"0")}
 function addDays(s,n){const p=String(s||"").split("-");if(p.length!==3)return"";const d=new Date(Date.UTC(+p[0],p[1]-1,+p[2]+(Math.max(0,Math.round(num(n)))||0)));return d.toISOString().slice(0,10)}
 function qsay(t,k){const m=$("qmsg");m.textContent=t;m.className="msg "+(k||"info");m.hidden=false}
-const QF=["qnumero","qfecha","qvalidez","qmoneda","qcliente","qidentificacion","qpais","qemail","qdireccion","qdesc","qcond","qcondOtro","qplazo","qnota"];
+const QF=["qnumero","qfecha","qidioma","qvalidez","qmoneda","qcliente","qidentificacion","qpais","qemail","qdireccion","qdesc","qcond","qcondOtro","qplazo","qnota"];
 function qGet(){const o={};QF.forEach(k=>o[k]=$(k).value.trim());o.qnovedades=$("qnovedades").checked;o.lineas=qlines.map(l=>({s:l.s,d:l.d,c:l.c,p:l.p}));return o}
-function qCalc(){const o=qGet();const ls=qlines.map(l=>{const c=num(l.c),p=num(l.p);return{servicio:optLabel(l.s),descripcion:String(l.d||"").trim(),cantidad:c,precio:p,importe:Math.round(c*p*100)/100}}).filter(l=>l.cantidad>0||l.precio>0||l.descripcion);
+function qCalc(){const o=qGet(),lg=o.qidioma||"es",T=LG(lg);const ls=qlines.map(l=>{const c=num(l.c),p=num(l.p),sp=String(l.s||"").split("|");return{servicio:svcL(sp[0],sp[1],lg),descripcion:String(l.d||"").trim(),cantidad:c,precio:p,importe:Math.round(c*p*100)/100}}).filter(l=>l.cantidad>0||l.precio>0||l.descripcion);
   const sub=Math.round(ls.reduce((a,l)=>a+l.importe,0)*100)/100,dp=Math.min(100,Math.max(0,num(o.qdesc))),desc=Math.round(sub*dp)/100,total=Math.round((sub-desc)*100)/100;
-  const ap=o.qcond==="otro"?null:num(o.qcond),cond=o.qcond==="otro"?(o.qcondOtro||"A convenir"):$("qcond").selectedOptions[0].textContent;
-  return{o,ls,sub,dp,desc,total,ap,ant:ap===null?null:Math.round(total*ap)/100,cond,vence:addDays(o.qfecha,o.qvalidez)}}
-function qSet(o){QF.forEach(k=>{if(o[k]!==undefined)$(k).value=o[k]});$("qnovedades").checked=!!o.qnovedades;qlines=(o.lineas&&o.lineas.length?o.lineas:[{s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0}]).map(l=>Object.assign({},l));qDrawLines();qRender()}
+  const ap=o.qcond==="otro"?null:num(o.qcond),cond=o.qcond==="otro"?(o.qcondOtro||T.aConvenir):(T.cond[o.qcond]||$("qcond").selectedOptions[0].textContent);
+  return{o,l:lg,ls,sub,dp,desc,total,ap,ant:ap===null?null:Math.round(total*ap)/100,cond,vence:addDays(o.qfecha,o.qvalidez)}}
+function qSet(o){$("qidioma").dataset.manual=o.qidioma?"1":"0";if(!o.qidioma){$("qidioma").value=idiomaPorPais(o.qpais)||"es"}QF.forEach(k=>{if(o[k]!==undefined)$(k).value=o[k]});$("qnovedades").checked=!!o.qnovedades;qlines=(o.lineas&&o.lineas.length?o.lineas:[{s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0}]).map(l=>Object.assign({},l));qDrawLines();qRender()}
 function qDrawLines(){const w=$("qlines");w.innerHTML="";qlines.forEach((l,i)=>{const box=document.createElement("div");box.className="qline";
   const lb=(t,el,cls)=>{const L=document.createElement("label");if(cls)L.className=cls;L.append(document.createTextNode(t),el);return L};
   const sel=document.createElement("select");sel.id="ql_s_"+i;SERV_OPTS.forEach(([s,o])=>{const op=document.createElement("option");op.value=s+"|"+o;op.textContent=s+(o?" · "+o:"");sel.appendChild(op)});sel.value=l.s;if(sel.value!==l.s){sel.selectedIndex=0;l.s=sel.value}
@@ -544,57 +597,56 @@ function qDrawLines(){const w=$("qlines");w.innerHTML="";qlines.forEach((l,i)=>{
   const foot=document.createElement("div");foot.className="qfoot";const imp=document.createElement("span");imp.className="mono qimp";imp.dataset.i=i;
   const x=document.createElement("button");x.type="button";x.className="link";x.textContent="Quitar";x.disabled=qlines.length<2;x.onclick=()=>{qlines.splice(i,1);qDrawLines();qRender()};
   foot.append(imp,x);box.append(lb("Servicio "+(i+1),sel,"full"),lb("Descripción (opcional)",d,"full"),lb("Cantidad",c),lb("Precio unitario",p),foot);w.appendChild(box)})}
-function qRender(){const r=qCalc(),o=r.o,cur=o.qmoneda;
-  document.querySelectorAll("#qlines .qimp").forEach(s=>{const l=qlines[+s.dataset.i];s.textContent="Importe: "+money(num(l.c)*num(l.p),cur)});
+function qRender(){const r=qCalc(),o=r.o,cur=o.qmoneda,l=r.l,T=LG(l),M=n=>moneyL(n,cur,l);aplicarTextos($("qpaper"),l);
+  document.querySelectorAll("#qlines .qimp").forEach(s=>{const x=qlines[+s.dataset.i];s.textContent="Importe: "+money(num(x.c)*num(x.p),cur)});
   $("qcondOtroWrap").hidden=o.qcond!=="otro";
-  $("qpNum").textContent="N° "+(o.qnumero||"—");$("qpFecha").textContent="Fecha: "+fmtDate(o.qfecha);$("qpValido").textContent=r.vence?"Válido hasta: "+fmtDate(r.vence):"";
+  $("qpNum").textContent=T.num+" "+(o.qnumero||"—");$("qpFecha").textContent=T.fecha+": "+fmtDateL(o.qfecha,l);$("qpValido").textContent=r.vence?T.validoHasta+": "+fmtDateL(r.vence,l):"";
   $("qpCliente").textContent=o.qcliente||"—";$("qpId").textContent=o.qidentificacion?"ID: "+o.qidentificacion:"";$("qpDir").textContent=o.qdireccion;$("qpEmail").textContent=o.qemail;
-  $("qpPais").textContent=o.qpais||"—";$("qpPlazo").textContent=o.qplazo||"A convenir";
-  const tb=$("qpLines");tb.innerHTML="";(r.ls.length?r.ls:[{servicio:"—",descripcion:"",cantidad:0,precio:0,importe:0}]).forEach(l=>{const tr=document.createElement("tr");
-    const td=document.createElement("td");const a=document.createElement("div");a.className="p-val";a.textContent=l.servicio;td.appendChild(a);if(l.descripcion){const b=document.createElement("div");b.className="p-small";b.textContent=l.descripcion;td.appendChild(b)}tr.appendChild(td);
-    [String(l.cantidad),money(l.precio,cur),money(l.importe,cur)].forEach(v=>{const t=document.createElement("td");t.className="r";t.textContent=v;tr.appendChild(t)});tb.appendChild(tr)});
-  $("qpSub").textContent=money(r.sub,cur);$("qpDescRow").hidden=!(r.dp>0);$("qpDescLbl").textContent="Descuento ("+r.dp+" %)";$("qpDesc").textContent="− "+money(r.desc,cur);
-  $("qpTotal").textContent=money(r.total,cur);$("qpTotalSub").textContent=r.ls.length+" servicio"+(r.ls.length===1?"":"s");
-  $("qpCond").textContent=r.cond;$("qpAntRow").hidden=r.ant===null||r.ap>=100;$("qpAnt").textContent=r.ant===null?"":money(r.ant,cur);
-  $("qpNota").textContent=o.qnota?"Nota: "+o.qnota:"";
+  $("qpPais").textContent=tr(o.qpais,l)||"—";$("qpPlazo").textContent=o.qplazo||T.aConvenir;
+  const tb=$("qpLines");tb.innerHTML="";(r.ls.length?r.ls:[{servicio:"—",descripcion:"",cantidad:0,precio:0,importe:0}]).forEach(x=>{const tr2=document.createElement("tr");
+    const td=document.createElement("td");const a=document.createElement("div");a.className="p-val";a.textContent=x.servicio;td.appendChild(a);if(x.descripcion){const b=document.createElement("div");b.className="p-small";b.textContent=x.descripcion;td.appendChild(b)}tr2.appendChild(td);
+    [String(x.cantidad),M(x.precio),M(x.importe)].forEach(v=>{const t=document.createElement("td");t.className="r";t.textContent=v;tr2.appendChild(t)});tb.appendChild(tr2)});
+  $("qpSub").textContent=M(r.sub);$("qpDescRow").hidden=!(r.dp>0);$("qpDescLbl").textContent=T.descuento+" ("+r.dp+" %)";$("qpDesc").textContent="− "+M(r.desc);
+  $("qpTotal").textContent=M(r.total);$("qpTotalSub").textContent=T.servicios(r.ls.length);
+  $("qpCond").textContent=r.cond;$("qpAntRow").hidden=r.ant===null||r.ap>=100;$("qpAnt").textContent=r.ant===null?"":M(r.ant);
+  $("qpNota").textContent=o.qnota?T.nota+": "+o.qnota:"";
   const cli=$("qEnviarCliente").checked,ok=emailOk(o.qemail);$("qHint").textContent="Tú recibes tu copia en tu correo."+(cli?(ok?" El cliente recibe el presupuesto en PDF con un botón para aceptarlo por WhatsApp.":" Para enviárselo al cliente, escribe su correo arriba."):"");
   try{localStorage.setItem("vt_presu_draft",JSON.stringify(o))}catch(e){}}
 
 function qPdf(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)throw new Error("nolib");
-  const r=qCalc(),o=r.o,cur=o.qmoneda,doc=new J({unit:"mm",format:"a4"}),L=20,R=190;const ink=[17,27,48],mut=[106,115,137],line=[225,229,238];
+  const r=qCalc(),o=r.o,cur=o.qmoneda,l=r.l,T=LG(l),M=n=>moneyL(n,cur,l),doc=new J({unit:"mm",format:"a4"}),L=20,R=190;const ink=[17,27,48],mut=[106,115,137],line=[225,229,238];
   const head=()=>{doc.addImage(LOGO,"JPEG",L,15,15,15);doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(17);doc.text("VENEIATECH",L+19,25.5);
-    doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text("Manuel Rivas · Dresden, Alemania",L,36);doc.text("info@veneiatech.de · www.veneiatech.de",L,40.5);
-    doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text("PRESUPUESTO",R,22,{align:"right"});
-    doc.setFont("courier","normal");doc.setFontSize(10);doc.text("N° "+o.qnumero,R,28,{align:"right"});
-    doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("Fecha: "+fmtDate(o.qfecha),R,33.5,{align:"right"});if(r.vence)doc.text("Válido hasta: "+fmtDate(r.vence),R,38.5,{align:"right"});
+    doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text(T.ubic,L,36);doc.text("info@veneiatech.de · www.veneiatech.de",L,40.5);
+    doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(T.presupuesto.toUpperCase(),R,22,{align:"right"});
+    doc.setFont("courier","normal");doc.setFontSize(10);doc.text(T.num+" "+o.qnumero,R,28,{align:"right"});
+    doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...mut);doc.text(T.fecha+": "+fmtDateL(o.qfecha,l),R,33.5,{align:"right"});if(r.vence)doc.text(T.validoHasta+": "+fmtDateL(r.vence,l),R,38.5,{align:"right"});
     doc.setDrawColor(...ink);doc.setLineWidth(1);doc.line(L,46,R,46)};
   const foot=()=>{const fy=272;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,fy,R,fy);doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...ink);
-    doc.text("Para aceptar este presupuesto, responda a info@veneiatech.de o escríbanos por WhatsApp.",L,fy+6);doc.setFontSize(6.5);doc.setTextColor(...mut);
-    doc.text("Este presupuesto no es una factura. Conforme al § 19 UStG no se factura IVA (Kleinunternehmer).",L,fy+11)};
+    doc.text(T.aceptar,L,fy+6);doc.setFontSize(6.5);doc.setTextColor(...mut);doc.text(T.legalPresu,L,fy+11)};
   const lbl=(t,x,yy,al)=>{doc.setFont("helvetica","bold");doc.setFontSize(7.5);doc.setTextColor(...mut);doc.text(t.toUpperCase(),x,yy,al?{align:al}:undefined)};
-  head();let y=56;lbl("Cliente",L,y);lbl("País",115,y);y+=5.5;
-  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const cl=doc.splitTextToSize(o.qcliente||"—",88);doc.text(cl,L,y);doc.text(o.qpais||"—",115,y);
+  head();let y=56;lbl(T.cliente,L,y);lbl(T.pais,115,y);y+=5.5;
+  doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(...ink);const cl=doc.splitTextToSize(o.qcliente||"—",88);doc.text(cl,L,y);doc.text(tr(o.qpais,l)||"—",115,y);
   let yc=y+cl.length*5;doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);
   if(o.qidentificacion){doc.text("ID: "+o.qidentificacion,L,yc);yc+=4}if(o.qdireccion){const d=doc.splitTextToSize(o.qdireccion,88);doc.text(d,L,yc);yc+=d.length*4}if(o.qemail){doc.text(o.qemail,L,yc);yc+=4}
-  lbl("Plazo de entrega",115,y+9);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);const pl=doc.splitTextToSize(o.qplazo||"A convenir",75);doc.text(pl,115,y+14.5);
+  lbl(T.plazo,115,y+9);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);const pl=doc.splitTextToSize(o.qplazo||T.aConvenir,75);doc.text(pl,115,y+14.5);
   y=Math.max(yc,y+14.5+pl.length*4.5)+8;
-  const th=()=>{lbl("Servicio",L,y);lbl("Cant.",128,y,"right");lbl("Precio",158,y,"right");lbl("Importe",R,y,"right");y+=2.5;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=6};th();
-  r.ls.forEach(l=>{const dl=l.descripcion?doc.splitTextToSize(l.descripcion,100):[];const sl=doc.splitTextToSize(l.servicio,100);const h=sl.length*5+dl.length*4.2+4;
+  const th=()=>{lbl(T.servicio,L,y);lbl(T.cant,128,y,"right");lbl(T.precio,158,y,"right");lbl(T.importe,R,y,"right");y+=2.5;doc.setDrawColor(...line);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=6};th();
+  r.ls.forEach(x=>{const dl=x.descripcion?doc.splitTextToSize(x.descripcion,100):[];const sl=doc.splitTextToSize(x.servicio,100);const h=sl.length*5+dl.length*4.2+4;
     if(y+h>250){foot();doc.addPage();head();y=56;th()}
     doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...ink);doc.text(sl,L,y);
-    doc.setFont("courier","normal");doc.setFontSize(9.5);doc.text(String(l.cantidad),128,y,{align:"right"});doc.text(money(l.precio,cur),158,y,{align:"right"});doc.setFont("courier","bold");doc.text(money(l.importe,cur),R,y,{align:"right"});
+    doc.setFont("courier","normal");doc.setFontSize(9.5);doc.text(String(x.cantidad),128,y,{align:"right"});doc.text(M(x.precio),158,y,{align:"right"});doc.setFont("courier","bold");doc.text(M(x.importe),R,y,{align:"right"});
     let yy=y+sl.length*5;if(dl.length){doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(...mut);doc.text(dl,L,yy-1);yy+=dl.length*4.2}
     y=yy+1;doc.setDrawColor(...line);doc.line(L,y-2,R,y-2);y+=4});
   if(y>205){foot();doc.addPage();head();y=56}
   const row=(k,v,b)=>{doc.setFont("helvetica",b?"bold":"normal");doc.setFontSize(9.5);doc.setTextColor(...ink);doc.text(k,110,y);doc.setFont("courier",b?"bold":"normal");doc.text(v,R,y,{align:"right"});y+=6};
-  row("Subtotal",money(r.sub,cur));if(r.dp>0)row("Descuento ("+r.dp+" %)","- "+money(r.desc,cur));y+=2;
-  doc.setFillColor(...ink);doc.roundedRect(L,y,R-L,16,2,2,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text("TOTAL DEL PRESUPUESTO",L+6,y+10);
-  doc.setFont("courier","bold");doc.setFontSize(15);doc.text(money(r.total,cur),R-6,y+10.5,{align:"right"});y+=25;
-  lbl("Condiciones de pago",L,y);y+=5;doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...ink);const cd=doc.splitTextToSize(r.cond,R-L);doc.text(cd,L,y);y+=cd.length*5;
-  if(r.ant!==null&&r.ap<100){doc.setFont("helvetica","bold");doc.text("Abono para iniciar: "+money(r.ant,cur),L,y+1);y+=7}
-  if(o.qnota){y+=3;doc.setFont("helvetica","italic");doc.setFontSize(9);doc.setTextColor(...mut);const n=doc.splitTextToSize("Nota: "+o.qnota,R-L);doc.text(n,L,y);y+=n.length*4.5}
+  row(T.subtotal,M(r.sub));if(r.dp>0)row(T.descuento+" ("+r.dp+" %)","- "+M(r.desc));y+=2;
+  doc.setFillColor(...ink);doc.roundedRect(L,y,R-L,16,2,2,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text(T.totalPresu.toUpperCase(),L+6,y+10);
+  doc.setFont("courier","bold");doc.setFontSize(15);doc.text(M(r.total),R-6,y+10.5,{align:"right"});y+=25;
+  lbl(T.condPago,L,y);y+=5;doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...ink);const cd=doc.splitTextToSize(r.cond,R-L);doc.text(cd,L,y);y+=cd.length*5;
+  if(r.ant!==null&&r.ap<100){doc.setFont("helvetica","bold");doc.text(T.abonoIniciar+": "+M(r.ant),L,y+1);y+=7}
+  if(o.qnota){y+=3;doc.setFont("helvetica","italic");doc.setFontSize(9);doc.setTextColor(...mut);const n=doc.splitTextToSize(T.nota+": "+o.qnota,R-L);doc.text(n,L,y);y+=n.length*4.5}
   foot();return doc}
-function qFile(o){return "Presupuesto_"+o.qnumero+"_"+(o.qcliente||"cliente").replace(/[^\wÀ-ÿ]+/g,"_").slice(0,40)+".pdf"}
+function qFile(o){return LG(o.qidioma).fPresu+"_"+o.qnumero+"_"+(o.qcliente||"cliente").replace(/[^\wÀ-ÿ]+/g,"_").slice(0,40)+".pdf"}
 
 function qSave(extra){const r=qCalc(),o=r.o;if(!o.qnumero||!o.qcliente){qsay("Falta el número o el nombre del cliente.","err");return false}
   if(!r.ls.length||r.total<=0){qsay("Agrega al menos un servicio con precio.","err");return false}
@@ -615,11 +667,11 @@ function qRenderHist(){const q=$("qbuscar").value.trim().toLowerCase(),list=pres
   if(!list.length){const e=document.createElement("p");e.className="empty";e.textContent="Ningún presupuesto coincide con la búsqueda.";w.appendChild(e)}}
 
 function qConvert(p){const ls=(p.lineas||[]).filter(l=>num(l.c)>0||num(l.p)>0);if(!ls.length){qsay("Este presupuesto no tiene servicios.","err");return}
-  const [s,sub]=String(ls[0].s).split("|");const desc=ls.length>1?"Incluye: "+ls.map(l=>optLabel(l.s)+(num(l.c)>1?" (x"+num(l.c)+")":"")).join(" + "):(ls[0].d||"");
+  const [s,sub]=String(ls[0].s).split("|");const lg=p.qidioma||"es";const desc=ls.length>1?LG(lg).incluye+": "+ls.map(l=>{const sp=String(l.s).split("|");return svcL(sp[0],sp[1],lg)+(num(l.c)>1?" (x"+num(l.c)+")":"")}).join(" + "):(ls[0].d||"");
   const ap=p.qcond==="otro"?"50":String(num(p.qcond)||50),mod=["50","30","100"].includes(ap)?ap:"50",nro=nextNumber();
   showTab("recibo");sampleOn=false;$("sampleTag").hidden=true;
-  set({numero:nro,fecha:today(),cliente:p.qcliente,identificacion:p.qidentificacion,pais:p.qpais,clienteEmail:p.qemail,direccion:p.qdireccion,servicio:s,subservicio:sub||"",concepto:desc,
-    total:String(p.totalN||0),moneda:p.qmoneda,abono:"",previo:"0",metodo:$("metodo").value,nota:"Según presupuesto "+p.qnumero+".",novedades:!!p.qnovedades,modo:mod});
+  set({numero:nro,fecha:today(),idioma:lg,cliente:p.qcliente,identificacion:p.qidentificacion,pais:p.qpais,clienteEmail:p.qemail,direccion:p.qdireccion,servicio:s,subservicio:sub||"",concepto:desc,
+    total:String(p.totalN||0),moneda:p.qmoneda,abono:"",previo:"0",metodo:$("metodo").value,nota:LG(lg).segun+" "+p.qnumero+".",novedades:!!p.qnovedades,modo:mod});
   setModo(mod);p.estado="convertido";p.recibo=nro;p.actualizado=Date.now();qStore();qRenderHist();window.scrollTo({top:0,behavior:"smooth"});
   say("Recibo "+nro+" creado desde el presupuesto "+p.qnumero+". Revisa el método de pago y pulsa “Enviar recibo”.","ok")}
 
@@ -628,7 +680,7 @@ function showTab(t){const pr=t==="presupuesto";$("tabRecibo").hidden=pr;$("histR
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 
 $("qAdd").onclick=()=>{qlines.push({s:SERV_OPTS[0][0]+"|"+SERV_OPTS[0][1],d:"",c:1,p:0});qDrawLines();qRender();const el=$("ql_s_"+(qlines.length-1));if(el)el.focus()};
-$("qform").addEventListener("input",()=>{if(qSample){qSample=false;$("qSampleTag").hidden=true}qRender()});
+$("qform").addEventListener("input",e=>{if(qSample){qSample=false;$("qSampleTag").hidden=true}if(e.target.id==="qidioma")$("qidioma").dataset.manual="1";if(e.target.id==="qpais")autoIdioma("qidioma","qpais");qRender()});
 $("qform").addEventListener("change",qRender);
 $("qform").addEventListener("submit",e=>e.preventDefault());
 $("qbuscar").addEventListener("input",qRenderHist);
@@ -644,7 +696,7 @@ $("qMail").onclick=async()=>{const r=qCalc(),o=r.o,k=cfg();
   let doc;try{doc=qPdf()}catch(e){qsay("No se pudo generar el PDF.","err");return}
   const b=$("qMail");b.disabled=true;b.lastChild.textContent="Enviando…";
   const payload={docTipo:"presupuesto",tipo:"Presupuesto",numero:o.qnumero,fecha:o.qfecha,validoHasta:r.vence,cliente:o.qcliente,identificacion:o.qidentificacion,pais:o.qpais,clienteEmail:o.qemail,direccion:o.qdireccion,
-    moneda:o.qmoneda,lineas:r.ls,subtotal:r.sub,descuentoPct:r.dp,descuento:r.desc,total:r.total,condiciones:r.cond,anticipoPct:r.ap,anticipo:r.ant,plazo:o.qplazo,nota:o.qnota,
+    lang:r.l,moneda:o.qmoneda,lineas:r.ls,subtotal:r.sub,descuentoPct:r.dp,descuento:r.desc,total:r.total,condiciones:r.cond,anticipoPct:r.ap,anticipo:r.ant,plazo:o.qplazo,nota:o.qnota,
     servicio:r.ls.map(l=>l.servicio).join(" + "),enviarCliente:alCliente,aceptaNovedades:o.qnovedades,filename:qFile(o),pdfBase64:doc.output("datauristring").split(",")[1]};
   try{const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),30000);
     const res=await fetch(k.url,{method:"POST",headers:{"Content-Type":"application/json","X-Veneiatech-Key":k.key},body:JSON.stringify(payload),signal:ctl.signal});clearTimeout(t);
@@ -685,13 +737,13 @@ function acSetup(inputId,conPresus,onPick){const inp=$(inputId),list=$(inputId+"
   inp.addEventListener("blur",()=>{tmr=setTimeout(close,120)});
   inp.addEventListener("keydown",e=>{if(list.hidden)return;if(e.key==="ArrowDown"){e.preventDefault();sel=Math.min(res.length-1,sel+1);draw()}
     else if(e.key==="ArrowUp"){e.preventDefault();sel=Math.max(0,sel-1);draw()}else if(e.key==="Enter"){e.preventDefault();pick(sel<0?0:sel)}else if(e.key==="Escape"){close()}})}
-function llenarClienteRecibo(c){$("cliente").value=c.nombre||"";$("identificacion").value=c.identificacion||"";$("pais").value=c.pais||"";$("clienteEmail").value=c.email||"";$("direccion").value=c.direccion||"";$("novedades").checked=!!c.novedades;
+function llenarClienteRecibo(c){$("cliente").value=c.nombre||"";$("identificacion").value=c.identificacion||"";$("pais").value=c.pais||"";$("clienteEmail").value=c.email||"";$("direccion").value=c.direccion||"";$("novedades").checked=!!c.novedades;autoIdioma("idioma","pais");
   sampleOn=false;$("sampleTag").hidden=true;render()}
 acSetup("rbuscar",true,r=>{if(r.tipo==="p"){if(r.p.estado==="convertido"){llenarClienteRecibo({nombre:r.p.qcliente,identificacion:r.p.qidentificacion,pais:r.p.qpais,email:r.p.qemail,direccion:r.p.qdireccion,novedades:r.p.qnovedades});
       say("El presupuesto "+r.p.qnumero+" ya se convirtió en "+(r.p.recibo||"un recibo")+". Cargué solo los datos del cliente; para cobrar el saldo usa “Cobrar saldo” en el historial.","info")}
     else qConvert(r.p)}
   else{llenarClienteRecibo(r.c);say("Datos de "+r.c.nombre+" cargados. Completa el servicio y el monto.","info")}});
-acSetup("qbuscarCli",false,r=>{const c=r.c;$("qcliente").value=c.nombre||"";$("qidentificacion").value=c.identificacion||"";$("qpais").value=c.pais||"";$("qemail").value=c.email||"";$("qdireccion").value=c.direccion||"";$("qnovedades").checked=!!c.novedades;
+acSetup("qbuscarCli",false,r=>{const c=r.c;$("qcliente").value=c.nombre||"";$("qidentificacion").value=c.identificacion||"";$("qpais").value=c.pais||"";$("qemail").value=c.email||"";$("qdireccion").value=c.direccion||"";$("qnovedades").checked=!!c.novedades;autoIdioma("qidioma","qpais");
   qSample=false;$("qSampleTag").hidden=true;qRender();qsay("Datos de "+c.nombre+" cargados.","info")});
 
 /* ---------- boot ---------- */
